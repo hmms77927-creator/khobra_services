@@ -90,7 +90,7 @@ class _OnboardingscreenState extends State<Onboardingscreen> {
                     } else {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => loginScreen()),
+                        MaterialPageRoute(builder: (context) =>LoginScreen()),
                       );
                     }
                   },

@@ -1,9 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_newproject/Constant/app-colors.dart';
 
+// class AppTextfield extends StatelessWidget {
+//   final TextEditingController? controller;
+//   final bool? obscureText;
+//   final String hintText;
+//   final Color borderside;
+//   final Color bordercolor;
+//
+//   const AppTextfield({
+//     super.key,
+//     this.controller,
+//     this.obscureText,
+//     required this.hintText,
+//     required this.borderside,
+//     required this.bordercolor,
+//   });
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return SizedBox(
+//       height: 56,
+//       width: 312,
+//       child: TextField(
+//         controller: controller,
+//         decoration: InputDecoration(
+//           border: OutlineInputBorder(
+//             borderRadius: BorderRadius.circular(9.09),
+//             borderSide: BorderSide(color: borderside),
+//           ),
+//           hintText: hintText,
+//           fillColor: AppColors.white,
+//           hintStyle: TextStyle(
+//             fontSize: 14,
+//             fontWeight: .w500,
+//             color: AppColors.dimblack,
+//           ),
+//           focusedBorder: OutlineInputBorder(
+//             borderRadius: BorderRadius.circular(9.09),
+//             borderSide: BorderSide(color: bordercolor),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
 class AppTextfield extends StatelessWidget {
   final TextEditingController? controller;
-  final bool? obscureText;
+  final bool obscureText; // ✅ default false rakhenge
   final String hintText;
   final Color borderside;
   final Color bordercolor;
@@ -11,7 +56,7 @@ class AppTextfield extends StatelessWidget {
   const AppTextfield({
     super.key,
     this.controller,
-    this.obscureText,
+    this.obscureText = false, // ✅ by default normal text
     required this.hintText,
     required this.borderside,
     required this.bordercolor,
@@ -24,18 +69,27 @@ class AppTextfield extends StatelessWidget {
       width: 312,
       child: TextField(
         controller: controller,
+        obscureText: obscureText, // ✅ apply here
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(9.09),
             borderSide: BorderSide(color: borderside),
           ),
           hintText: hintText,
+          filled: true,
           fillColor: AppColors.white,
+
           hintStyle: TextStyle(
             fontSize: 14,
-            fontWeight: .w500,
+            fontWeight: FontWeight.w500,
             color: AppColors.dimblack,
           ),
+
+          // ✅ ternary operator for eye icon (only password field)
+          suffixIcon: obscureText
+              ? Icon(Icons.visibility_off)
+              : null,
+
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(9.09),
             borderSide: BorderSide(color: bordercolor),

@@ -5,6 +5,7 @@ import 'package:flutter_application_newproject/View/Widgets/App-Buttons/custom-B
 import 'package:flutter_application_newproject/View/Widgets/Bottom-NavigationBar/Bottombar.dart';
 import 'package:flutter_application_newproject/View/Widgets/Custom-Container/custom_container.dart';
 import 'package:flutter_application_newproject/View/Widgets/TextField/app-textfield.dart';
+import 'package:flutter_application_newproject/View_Model/auth_viewmodel.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -15,56 +16,115 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   bool isChecked = true;
+
+  final AuthViewModel vm = AuthViewModel();
+
+  TextEditingController emailcontroller = TextEditingController();
+  TextEditingController password1controller = TextEditingController();
+  TextEditingController password2controller = TextEditingController();
+
+  bool isLoading = false;
+  void signup() async {
+    if (!isChecked) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Please accept Terms & Conditions")),
+      );
+      return;
+    }
+
+    if (password1controller.text != password2controller.text) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Passwords do not match")),
+      );
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+    });
+
+    final user = await vm.signup(
+      emailcontroller.text.trim(),
+      password1controller.text.trim(),
+    );
+
+    setState(() {
+      isLoading = false;
+    });
+
+    if (user != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Signup Successful")),
+      );
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Bottom1()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Signup Failed")),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    emailcontroller.dispose();
+    password1controller.dispose();
+    password2controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
         backgroundColor: AppColors.white,
-
         automaticallyImplyLeading: false,
+        elevation: 0,
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              child: Text(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            children: [
+              SizedBox(height: 20),
+              Text(
                 'Create Account',
                 style: TextStyle(
                   color: Color(0xFF941578),
                   fontSize: 32,
-                  fontWeight: .w700,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 35.0),
-              child: AppTextfield(
+              SizedBox(height: 35),
+              AppTextfield(
+                controller: emailcontroller,
                 hintText: 'Email',
                 borderside: AppColors.purple,
                 bordercolor: AppColors.purple,
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 15.0),
-              child: AppTextfield(
+              SizedBox(height: 15),
+              AppTextfield(
+                controller: password1controller,
                 hintText: 'Password',
+                obscureText: true,
                 borderside: AppColors.lightwhite,
                 bordercolor: AppColors.lightwhite,
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 15.0),
-              child: AppTextfield(
+              SizedBox(height: 15),
+              AppTextfield(
+                controller: password2controller,
                 hintText: 'Confirm Password',
+                obscureText: true,
                 borderside: AppColors.lightwhite,
                 bordercolor: AppColors.lightwhite,
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 10.0),
-              child: Row(
-                mainAxisAlignment: .center,
+              SizedBox(height: 15),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   AgreeCircleButton(
                     isChecked: isChecked,
@@ -74,44 +134,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       });
                     },
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 25.0),
-                    child: CustomContainer(
-                      title: 'Agree to Terms & Conditions',
-                      color: AppColors.lightBlack,
-                    ),
+                  SizedBox(width: 10),
+                  CustomContainer(
+                    title: 'Agree to Terms & Conditions',
+                    color: AppColors.lightBlack,
                   ),
                 ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 35.0),
-              child: CustomButton(
+
+              SizedBox(height: 35),
+
+              // 🔹 Button
+              isLoading
+                  ? CircularProgressIndicator()
+                  : CustomButton(
                 text: 'Sign up',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Bottom1()),
-                  );
-                },
+                onPressed: signup,
                 backgroundColor: AppColors.purple,
                 iconColor: AppColors.purple,
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 90.0),
-              child: AppTextButton(
+              SizedBox(height: 60),
+              AppTextButton(
                 text: 'Already have an account',
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => loginScreen()),
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
                   );
                 },
                 borderRadius: 9,
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

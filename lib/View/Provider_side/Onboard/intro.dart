@@ -39,7 +39,7 @@ class _IntroState extends State<Intro> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => loginScreen()),
+                      MaterialPageRoute(builder: (context) => LoginScreen()),
                     );
                   },
                   image: AppImages.intro_1,

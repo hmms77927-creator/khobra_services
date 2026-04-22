@@ -34,94 +34,96 @@ class _DentalOfficeFormState extends State<DentalOfficeForm> {
           },
         ),
       ),
-      body: Column(
-        children: [
-          Align(
-            alignment: .topLeft,
-            child: Container(
-              width: 72,
-              child: Divider(color: AppColors.darkskin, thickness: 6),
-            ),
-          ),
-          Container(
-            width: 393,
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  blurRadius: 4,
-                  spreadRadius: 0,
-                  color: AppColors.pureblack.withOpacity(0.2),
-                  offset: Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Divider(color: AppColors.white, thickness: 6),
-          ),
-          formheader(
-            text: 'Enter your information for you\n profile',
-            color: AppColors.lightBlack,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0, bottom: 10),
-            child: Align(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Align(
               alignment: .topLeft,
-              child: FillForm(text: 'First Name', color: AppColors.pureblack),
+              child: Container(
+                width: 72,
+                child: Divider(color: AppColors.darkskin, thickness: 6),
+              ),
             ),
-          ),
-          AppTextfield(
-            hintText: 'Enter your First Name',
-            borderside: AppColors.lightwhite,
-            bordercolor: AppColors.lightwhite,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0, bottom: 10),
-            child: Align(
-              alignment: .topLeft,
-              child: FillForm(text: 'Last Name ', color: AppColors.pureblack),
+            Container(
+              width: 393,
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 4,
+                    spreadRadius: 0,
+                    color: AppColors.pureblack.withOpacity(0.2),
+                    offset: Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Divider(color: AppColors.white, thickness: 6),
             ),
-          ),
-          AppTextfield(
-            hintText: 'Enter your last name',
-            borderside: AppColors.lightwhite,
-            bordercolor: AppColors.lightwhite,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0, bottom: 10),
-            child: Align(
-              alignment: .topLeft,
-              child: FillForm(text: 'Phone No', color: AppColors.pureblack),
+            formheader(
+              text: 'Enter your information for you\n profile',
+              color: AppColors.lightBlack,
             ),
-          ),
-          AppTextfield(
-            hintText: 'Enter your phone ',
-            borderside: AppColors.lightwhite,
-            bordercolor: AppColors.lightwhite,
-          ),
-
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0, bottom: 10),
-            child: Align(
-              alignment: .topLeft,
-              child: FillForm(text: 'Address', color: AppColors.pureblack),
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, bottom: 10),
+              child: Align(
+                alignment: .topLeft,
+                child: FillForm(text: 'First Name', color: AppColors.pureblack),
+              ),
             ),
-          ),
-          AppTextfield(
-            hintText: 'Enter your address',
-            borderside: AppColors.lightwhite,
-            bordercolor: AppColors.lightwhite,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 90.0, right: 20, left: 200),
-            child: ArrowButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => DentalOfficeFillup()),
-                );
-              },
+            AppTextfield(
+              hintText: 'Enter your First Name',
+              borderside: AppColors.lightwhite,
+              bordercolor: AppColors.lightwhite,
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, bottom: 10),
+              child: Align(
+                alignment: .topLeft,
+                child: FillForm(text: 'Last Name ', color: AppColors.pureblack),
+              ),
+            ),
+            AppTextfield(
+              hintText: 'Enter your last name',
+              borderside: AppColors.lightwhite,
+              bordercolor: AppColors.lightwhite,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, bottom: 10),
+              child: Align(
+                alignment: .topLeft,
+                child: FillForm(text: 'Phone No', color: AppColors.pureblack),
+              ),
+            ),
+            AppTextfield(
+              hintText: 'Enter your phone ',
+              borderside: AppColors.lightwhite,
+              bordercolor: AppColors.lightwhite,
+            ),
+        
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, bottom: 10),
+              child: Align(
+                alignment: .topLeft,
+                child: FillForm(text: 'Address', color: AppColors.pureblack),
+              ),
+            ),
+            AppTextfield(
+              hintText: 'Enter your address',
+              borderside: AppColors.lightwhite,
+              bordercolor: AppColors.lightwhite,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 90.0, right: 20, left: 200),
+              child: ArrowButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DentalOfficeFillup()),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

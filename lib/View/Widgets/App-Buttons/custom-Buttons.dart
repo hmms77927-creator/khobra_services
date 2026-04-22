@@ -28,7 +28,7 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 350,
-      height: 60,
+      height: 66,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(

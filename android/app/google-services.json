@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "697263691901",
+    "project_id": "khobraservices",
+    "storage_bucket": "khobraservices.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:697263691901:android:f751dc8280ba650635f914",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_newproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfWpOoHuA81Z80P-57MuDfO3M7aJ5_h6g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

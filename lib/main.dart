@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_newproject/View/Booking/booking_1.dart';
 import 'package:flutter_application_newproject/View/Clock/select_time.dart';
@@ -46,8 +47,15 @@ import 'package:flutter_application_newproject/View/Provider_side/Splash/splash_
 import 'package:flutter_application_newproject/View/SplashScreen/splash-view.dart';
 import 'package:flutter_application_newproject/View/Widgets/Bottom-NavigationBar/Bottombar.dart';
 import 'package:flutter_application_newproject/View/Widgets/Bottom-NavigationBar/bottom_provider.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 
-void main() {
+import 'firebase_options.dart';
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -56,7 +64,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),

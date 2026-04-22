@@ -6,19 +6,67 @@ import 'package:flutter_application_newproject/View/Widgets/App-Buttons/custom-B
 import 'package:flutter_application_newproject/View/Widgets/Bottom-NavigationBar/Bottombar.dart';
 import 'package:flutter_application_newproject/View/Widgets/Custom-Container/custom_container.dart';
 import 'package:flutter_application_newproject/View/Widgets/TextField/app-textfield.dart';
+import 'package:flutter_application_newproject/View_Model/auth_viewmodel.dart';
 
-class loginScreen extends StatefulWidget {
-  const loginScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<loginScreen> createState() => _loginScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _loginScreenState extends State<loginScreen> {
+class _LoginScreenState extends State<LoginScreen> {
+  final AuthViewModel vm = AuthViewModel();
+
   TextEditingController emailcontroller = TextEditingController();
   TextEditingController passwordcontroller = TextEditingController();
+
   bool isChecked = true;
-  int currentindex = 0;
+  bool isLoading = false;
+  void login() async {
+    if (!isChecked) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Please accept Terms & Conditions")),
+      );
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+    });
+
+    final user = await vm.login(
+      emailcontroller.text.trim(),
+      passwordcontroller.text.trim(),
+    );
+
+    setState(() {
+      isLoading = false;
+    });
+
+    if (user != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Login Successful")),
+      );
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Bottom1()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Login Failed")),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    emailcontroller.dispose();
+    passwordcontroller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,40 +74,51 @@ class _loginScreenState extends State<loginScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.white,
         automaticallyImplyLeading: false,
+        elevation: 0,
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              child: Text(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            children: [
+              SizedBox(height: 20),
+
+              // 🔹 Title
+              Text(
                 'We Say Hello!',
                 style: TextStyle(
                   color: Color(0xFF941578),
                   fontSize: 32,
-                  fontWeight: .w700,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 35.0),
-              child: AppTextfield(
+
+              SizedBox(height: 35),
+
+              // 🔹 Email
+              AppTextfield(
+                controller: emailcontroller,
                 hintText: 'Email',
                 borderside: AppColors.purple,
                 bordercolor: AppColors.purple,
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: AppTextfield(
+
+              SizedBox(height: 20),
+
+              // 🔹 Password
+              AppTextfield(
+                controller: passwordcontroller,
+                obscureText: true,
                 hintText: 'Password',
                 borderside: AppColors.lightwhite,
                 bordercolor: AppColors.lightwhite,
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 35.0),
-              child: Row(
-                mainAxisAlignment: .center,
+
+              SizedBox(height: 25),
+
+              // 🔹 Terms
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   AgreeCircleButton(
                     isChecked: isChecked,
@@ -69,31 +128,31 @@ class _loginScreenState extends State<loginScreen> {
                       });
                     },
                   ),
+                  SizedBox(width: 10),
                   CustomContainer(
                     title: 'Agree to Terms & Conditions',
                     color: AppColors.lightBlack,
                   ),
                 ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 15.0),
-              child: CustomButton(
+
+              SizedBox(height: 25),
+
+              // 🔹 Login Button
+              isLoading
+                  ? CircularProgressIndicator()
+                  : CustomButton(
                 text: 'Sign In',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Bottom1()),
-                  );
-                },
+                onPressed: login, // 🔥 CALL HERE
                 backgroundColor: AppColors.purple,
                 iconColor: AppColors.purple,
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 20.0, top: 30),
-              child: Align(
-                alignment: .bottomRight,
+
+              SizedBox(height: 20),
+
+              // 🔹 Forgot Password
+              Align(
+                alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: () {
                     Navigator.push(
@@ -106,15 +165,16 @@ class _loginScreenState extends State<loginScreen> {
                     style: TextStyle(
                       color: AppColors.purple,
                       fontSize: 13,
-                      fontWeight: .w600,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 90.0),
-              child: AppTextButton(
+
+              SizedBox(height: 60),
+
+              // 🔹 Register
+              AppTextButton(
                 text: 'Create new account',
                 onPressed: () {
                   Navigator.push(
@@ -124,8 +184,8 @@ class _loginScreenState extends State<loginScreen> {
                 },
                 borderRadius: 9,
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

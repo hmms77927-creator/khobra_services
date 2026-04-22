@@ -129,7 +129,7 @@ class ResendContainer extends StatelessWidget {
                 title,
                 style: TextStyle(
                   color: titlecolor,
-                  fontSize: 12.22,
+                  fontSize: 12,
                   fontWeight: .w400,
                   decoration: TextDecoration.underline,
                 ),
