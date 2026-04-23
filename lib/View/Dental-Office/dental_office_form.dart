@@ -1,39 +1,58 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_newproject/Constant/app-colors.dart';
-import 'package:flutter_application_newproject/View/Dental-Office/dental_office_fillup.dart';
-import 'package:flutter_application_newproject/View/Widgets/App-Buttons/custom-Buttons.dart';
-import 'package:flutter_application_newproject/View/Widgets/Custom-Container/custom_container.dart';
-import 'package:flutter_application_newproject/View/Widgets/TextField/app-textfield.dart';
+import 'package:get/get.dart';
+import '../../Constant/app-colors.dart';
+import '../../Controller/auth_controller.dart';
+import '../Widgets/App-Buttons/custom-Buttons.dart';
+import '../Widgets/Custom-Container/custom_container.dart';
+import '../Widgets/TextField/app-textfield.dart';
+import 'dental_office_fillup.dart';
 
-class DentalOfficeForm extends StatefulWidget {
-  const DentalOfficeForm({super.key});
+
+class FormScreen extends StatefulWidget {
+  const FormScreen({super.key});
 
   @override
-  State<DentalOfficeForm> createState() => _DentalOfficeFormState();
+  State<FormScreen> createState() => _FormScreenState();
 }
 
-class _DentalOfficeFormState extends State<DentalOfficeForm> {
+class _FormScreenState extends State<FormScreen> {
+  final name = TextEditingController();
+  final lastname = TextEditingController();
+  final phone = TextEditingController();
+  final address = TextEditingController();
+
+  final controller = Get.put(UserController());
+
+  @override
+  void dispose() {
+    name.dispose();
+    lastname.dispose();
+    phone.dispose();
+    address.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: AppBar(
-        title: Text(
-          'Profile',
-          style: TextStyle(
-            color: AppColors.purple,
-            fontSize: 20,
-            fontWeight: .w700,
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: AppColors.white,
-        leading: LeadButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
+    backgroundColor: AppColors.white,
+    appBar: AppBar(
+    title: Text(
+    'Profile',
+    style: TextStyle(
+    color: AppColors.purple,
+    fontSize: 20,
+    fontWeight: .w700,
+    ),
+    ),
+    centerTitle: true,
+    backgroundColor: AppColors.white,
+    leading: LeadButton(
+    onPressed: () {
+    Navigator.pop(context);
+    },
+    ),
+    ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -70,6 +89,7 @@ class _DentalOfficeFormState extends State<DentalOfficeForm> {
               ),
             ),
             AppTextfield(
+              controller: name,
               hintText: 'Enter your First Name',
               borderside: AppColors.lightwhite,
               bordercolor: AppColors.lightwhite,
@@ -82,6 +102,7 @@ class _DentalOfficeFormState extends State<DentalOfficeForm> {
               ),
             ),
             AppTextfield(
+              controller: lastname,
               hintText: 'Enter your last name',
               borderside: AppColors.lightwhite,
               bordercolor: AppColors.lightwhite,
@@ -94,6 +115,7 @@ class _DentalOfficeFormState extends State<DentalOfficeForm> {
               ),
             ),
             AppTextfield(
+              controller: phone,
               hintText: 'Enter your phone ',
               borderside: AppColors.lightwhite,
               bordercolor: AppColors.lightwhite,
@@ -107,20 +129,50 @@ class _DentalOfficeFormState extends State<DentalOfficeForm> {
               ),
             ),
             AppTextfield(
+              controller: address,
               hintText: 'Enter your address',
               borderside: AppColors.lightwhite,
               bordercolor: AppColors.lightwhite,
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 90.0, right: 20, left: 200),
-              child: ArrowButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => DentalOfficeFillup()),
-                  );
-                },
+        Padding(
+                padding: const EdgeInsets.only(top: 90.0, right: 20, left: 200),
+              child: Obx(()=>controller.isLoading.value
+              ?CircularProgressIndicator()
+                  :  ArrowButton(
+                    onPressed: (){
+                      Get.to(() => ImageScreen(
+                              name: name.text,
+                              lastname: lastname.text,
+                              phone: phone.text,
+                              address: address.text,
+                            ));
+                      // await controller.addUser(  firstname.text,
+                      //           lastname.text,
+                      //           phone.text,
+                      //           address.text,
+                      // )),
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => ImageScreen(  name: firstname.text,
+                      //           lastname: lastname.text,
+                      //           phone: phone.text,
+                      //           address: address.text,)),
+                      // );
+                    },
+                  ),
               ),
+            ),
+        
+            ElevatedButton(
+              onPressed: () {
+                Get.to(() => ImageScreen(
+                  name: name.text,
+                  lastname: lastname.text,
+                  phone: phone.text,
+                  address: address.text,
+                ));
+              },
+              child: const Text("Next"),
             ),
           ],
         ),

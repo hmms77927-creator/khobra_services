@@ -21,7 +21,7 @@ class _Bottom1State extends State<Bottom1> {
     Notifications1(),
     FullScreenTimePicker(),
     Booking1(),
-    Profile(),
+    ProfileScreen(),
   ];
   @override
   Widget build(BuildContext context) {

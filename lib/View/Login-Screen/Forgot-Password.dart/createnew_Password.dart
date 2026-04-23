@@ -272,12 +272,12 @@ class _CreatenewPasswordState extends State<CreatenewPassword> {
           const SnackBar(content: Text("Password Updated Successfully")),
         );
 
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const DentalOfficeForm(),
-          ),
-        );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) =>  DentalOfficeForm(),
+        //   ),
+        // );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(

@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // 🔹 SIGNUP
   Future<User?> signup(String email, String password) async {
     try {
       UserCredential userCredential =
@@ -19,7 +18,8 @@ class AuthService {
     }
   }
 
-  // 🔹 LOGIN
+
+
   Future<User?> login(String email, String password) async {
     try {
       UserCredential userCredential =
@@ -35,7 +35,6 @@ class AuthService {
     }
   }
 
-  // 🔹 FORGOT PASSWORD (FIXED)
   Future<bool> forgotPassword(String email) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);

@@ -1,17 +1,33 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_newproject/Constant/app-colors.dart';
-import 'package:flutter_application_newproject/Constant/app-images.dart';
-import 'package:flutter_application_newproject/View/Widgets/App-Buttons/custom-Buttons.dart';
-import 'package:flutter_application_newproject/View/Widgets/Custom-Container/custom_container.dart';
+import 'package:get/get.dart';
+import '../../Constant/app-colors.dart';
+import '../../Constant/app-images.dart';
+import '../../Controller/auth_controller.dart';
+import '../../Controller/image_controller.dart';
+import '../Widgets/App-Buttons/custom-Buttons.dart';
+import '../Widgets/Custom-Container/custom_container.dart';
 
-class DentalOfficeFillup extends StatefulWidget {
-  const DentalOfficeFillup({super.key});
+
+class ImageScreen extends StatefulWidget {
+  final String name, lastname, phone, address;
+
+  const ImageScreen({
+    super.key,
+    required this.name,
+    required this.lastname,
+    required this.phone,
+    required this.address,
+  });
 
   @override
-  State<DentalOfficeFillup> createState() => _DentalOfficeFillupState();
+  State<ImageScreen> createState() => _ImageScreenState();
 }
 
-class _DentalOfficeFillupState extends State<DentalOfficeFillup> {
+class _ImageScreenState extends State<ImageScreen> {
+  final imgController = Get.put(ImageController());
+  final userController = Get.find<UserController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +38,7 @@ class _DentalOfficeFillupState extends State<DentalOfficeFillup> {
           style: TextStyle(
             color: AppColors.purple,
             fontSize: 20,
-            fontWeight: .w700,
+            fontWeight: FontWeight.w700,
           ),
         ),
         backgroundColor: AppColors.white,
@@ -34,9 +50,10 @@ class _DentalOfficeFillupState extends State<DentalOfficeFillup> {
         centerTitle: true,
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Align(
-            alignment: .topLeft,
+            alignment: Alignment.topLeft,
             child: Container(
               width: 245,
               child: Divider(color: AppColors.darkskin, thickness: 6),
@@ -67,51 +84,99 @@ class _DentalOfficeFillupState extends State<DentalOfficeFillup> {
               color: AppColors.pureblack,
             ),
           ),
-          Card(
-            elevation: 4,
-            color: AppColors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadiusGeometry.circular(30),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Container(
-                width: 266,
-                height: 178,
-                child: Image.asset(AppImages.upload_image, fit: BoxFit.cover),
+          Obx(() {
+            return GestureDetector(
+              onTap: () => imgController.pickImage(),
+              child: imgController.imagePath.value.isEmpty
+                  ? Card(
+                elevation: 4,
+                color: AppColors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Container(
+                    width: 266,
+                    height: 178,
+                    child: Image.asset(
+                      AppImages.upload_image,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              )
+                  : Card(
+                elevation: 4,
+                color: AppColors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.file(
+                      File(imgController.imagePath.value),
+                      fit: BoxFit.cover,
+                      width: 266,
+                      height: 178,
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 160.0, left: 195),
-            child: ArrowButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            child: Text(
-                              'We Say Hello!',
-                              style: TextStyle(
-                                color: AppColors.green,
-                                fontSize: 36,
-                                fontWeight: .w700,
-                              ),
-                            ),
-                          ),
-                          Container(child: Image.asset(AppImages.dialog)),
-                        ],
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
+            );
+          }),
+          // Obx(() {
+          //   return GestureDetector(
+          //     onTap: () => imgController.pickImage(),
+          //     child: CircleAvatar(
+          //       radius: 60,
+          //       backgroundImage: imgController.imagePath.value.isEmpty
+          //           ? null
+          //           : FileImage(File(imgController.imagePath.value)),
+          //       child: imgController.imagePath.value.isEmpty
+          //           ? const Icon(Icons.add_a_photo)
+          //           : null,
+          //     ),
+          //   );
+          // }),
+                    Padding(
+          padding: const EdgeInsets.only(top: 160.0, left: 195),
+child: ArrowButton(
+onPressed: () async{
+// controller.pickImage();
+  await userController.addUser(
+                widget.name,
+                widget.lastname,
+                widget.phone,
+                widget.address,
+                imgController.imagePath.value,
+              );
+showDialog(
+context: context,
+builder: (BuildContext context) {
+return AlertDialog(
+content: Column(
+mainAxisSize: MainAxisSize.min,
+children: [
+Text(
+'We Say Hello!',
+style: TextStyle(
+color: AppColors.green,
+fontSize: 36,
+fontWeight: FontWeight.w700,
+),
+),
+Image.asset(AppImages.dialog),
+],
+),
+);
+},
+);
+},
+),
+),
         ],
       ),
     );
