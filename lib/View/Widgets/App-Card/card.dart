@@ -1056,7 +1056,7 @@ class handymancard extends StatelessWidget {
     required this.buttontext,
     required this.subbuttontext,
     required this.onTap,
-    required this.onDoubleTap,
+    required this.onDoubleTap, required Widget imageWidget,
   });
 
   @override

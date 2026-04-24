@@ -12,3 +12,4 @@ class ImageController extends GetxController {
     }
   }
 }
+

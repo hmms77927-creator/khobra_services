@@ -1,67 +1,87 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_newproject/Constant/app-colors.dart';
-import 'package:flutter_application_newproject/Constant/app-images.dart';
-import 'package:flutter_application_newproject/View/Widgets/App-Buttons/custom-Buttons.dart';
-import 'package:flutter_application_newproject/View/Widgets/Custom-Container/custom_container.dart';
+import 'package:flutter_application_newproject/View/Provider_side/Profile_provi/profile_pro.dart';
 import 'package:flutter_application_newproject/View/Widgets/TextField/app-textfield.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
-class EditProfilePro extends StatefulWidget {
-  const EditProfilePro({super.key});
+import '../../../Constant/app-images.dart';
+import '../../../Controller/auth_controller.dart';
 
-  @override
-  State<EditProfilePro> createState() => _EditProfileProState();
-}
+class EditProfilePro extends StatelessWidget {
+  EditProfilePro({super.key});
 
-class _EditProfileProState extends State<EditProfilePro> {
-  TextEditingController personcontroller = TextEditingController();
-  TextEditingController person1controller = TextEditingController();
-  TextEditingController emailcontroller = TextEditingController();
-  TextEditingController passwordcontroller = TextEditingController();
-  TextEditingController phonecontroller = TextEditingController();
-  TextEditingController citycontroller = TextEditingController();
-  TextEditingController statecontroller = TextEditingController();
-  TextEditingController countrycontroller = TextEditingController();
-  TextEditingController addresscontroller = TextEditingController();
+  final controller = Get.put(ProviderController());
+
+  final person = TextEditingController();
+  final person1 = TextEditingController();
+  final email = TextEditingController();
+  final password = TextEditingController();
+  final phone = TextEditingController();
+  final city = TextEditingController();
+  final state = TextEditingController();
+  final country = TextEditingController();
+  final address = TextEditingController();
+
+  final RxString imagePath = ''.obs;
+
+  Future<void> pickImage() async {
+    final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (picked != null) {
+      imagePath.value = picked.path;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final data = controller.currentProvider.value;
+    if (data != null && person.text.isEmpty) {
+      person.text = data.person;
+      person1.text = data.person1;
+      email.text = data.email;
+      password.text = data.password;
+      phone.text = data.phonenumber;
+      city.text = data.city;
+      state.text = data.state;
+      country.text = data.country;
+      address.text = data.address;
+      imagePath.value = data.image;
+    }
+
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
         backgroundColor: AppColors.purple,
-        leadingWidth: 140,
+        leadingWidth: 200,
         leading: TextButton.icon(
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
           icon: Icon(Icons.arrow_back_ios, color: AppColors.white),
           label: Text(
             'Edit Profile',
             style: TextStyle(
               color: AppColors.white,
               fontSize: 16,
-              fontWeight: .w600,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.check, color: AppColors.white),
-          ),
-        ],
       ),
+
       body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            SizedBox(height: 20),
 
+            /// 🔥 IMAGE PICKER (UI SAME)
             Stack(
               children: [
-                CircleAvatar(
+                Obx(() => CircleAvatar(
                   radius: 70,
-                  backgroundImage: AssetImage(AppImages.profile_pro),
-                ),
-
+                  backgroundImage: imagePath.value.isNotEmpty
+                      ? FileImage(File(imagePath.value))
+                      : AssetImage(AppImages.profile_pro) as ImageProvider,
+                )),
                 Positioned(
                   bottom: 0,
                   right: 5,
@@ -71,160 +91,75 @@ class _EditProfileProState extends State<EditProfilePro> {
                       shape: const CircleBorder(),
                       side: BorderSide(color: AppColors.white, width: 3),
                     ),
-                    onPressed: () {},
+                    onPressed: pickImage,
                     icon: Icon(Icons.camera, color: AppColors.white),
                   ),
                 ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: SizedBox(
-                height: 48,
-                width: 335,
-                child: Profileprofield(
-                  text: 'Full Name',
-                  label: 'Name',
-                  controller: personcontroller,
-                  icon: Icons.person,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: SizedBox(
-                height: 48,
-                width: 335,
-                child: Profileprofield(
-                  text: 'User Name',
-                  label: 'Name',
-                  controller: person1controller,
-                  icon: Icons.person,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: SizedBox(
-                height: 48,
-                width: 335,
-                child: Profileprofield(
-                  text: 'ashutosh@user.com',
-                  label: 'Email',
-                  controller: emailcontroller,
-                  icon: Icons.email,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: SizedBox(
-                height: 48,
-                width: 335,
-                child: Profileprofield(
-                  text: 'Password',
-                  label: 'Password',
-                  controller: passwordcontroller,
-                  icon: Icons.visibility_off,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: SizedBox(
-                height: 48,
-                width: 335,
-                child: Profileprofield(
-                  text: 'Phone Number',
-                  label: 'Phone',
-                  controller: phonecontroller,
-                  icon: Icons.phone_callback,
-                ),
-              ),
-            ),
+
+            /// 🔽 ALL FIELDS (UI SAME)
+
+            _field('Full Name', person, Icons.person),
+            _field('User Name', person1, Icons.person),
+            _field('Email', email, Icons.email),
+            _field('Password', password, Icons.visibility_off),
+            _field('Phone Number', phone, Icons.phone),
+
             Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: SizedBox(
-                    height: 48,
-                    width: 157,
-                    child: Profileprofield(
-                      text: 'City',
-                      label: 'City',
-                      controller: citycontroller,
-                      icon: Icons.keyboard_arrow_down,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: SizedBox(
-                    height: 48,
-                    width: 157,
-                    child: Profileprofield(
-                      text: 'State',
-                      label: 'State',
-                      controller: statecontroller,
-                      icon: Icons.keyboard_arrow_down,
-                    ),
-                  ),
-                ),
+                Expanded(child: _field('City', city, Icons.location_city)),
+                SizedBox(width: 10),
+                Expanded(child: _field('State', state, Icons.map)),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: SizedBox(
-                height: 48,
-                width: 335,
-                child: Profileprofield(
-                  text: 'Country',
-                  label: 'Country',
-                  controller: countrycontroller,
-                  icon: Icons.keyboard_arrow_down,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: SizedBox(
-                height: 48,
-                width: 335,
-                child: Profileprofield(
-                  text: 'Address',
-                  label: 'Address',
-                  controller: addresscontroller,
-                  icon: Icons.location_on,
-                ),
-              ),
-            ),
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: SizedBox(
-                    width: 157,
-                    height: 48,
-                    child: TextButton(
-                      onPressed: () {},
-                      child: head2cont(
-                        text: 'Verify ID',
-                        color: AppColors.black,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: SizedBox(
-                    width: 157,
-                    height: 48,
-                    child: Bookbutton(text: 'Save', onPressed: () {}),
-                  ),
-                ),
-              ],
-            ),
+
+            _field('Country', country, Icons.flag),
+            _field('Address', address, Icons.location_on),
+
+            const SizedBox(height: 20),
+
+            /// 🔥 SAVE BUTTON
+            Obx(() => controller.isLoading.value
+                ? const CircularProgressIndicator()
+                : ElevatedButton(
+              onPressed: () async {
+
+                await controller.addProvider(
+                  person.text,
+                  person1.text,
+                  email.text,
+                  password.text,
+                  phone.text,
+                  city.text,
+                  state.text,
+                  country.text,
+                  address.text,
+                  imagePath.value,
+                );
+
+                Get.off(() => ProfilePro());
+              },
+              child: const Text("Save"),
+            )),
           ],
+        ),
+      ),
+    );
+  }
+
+  /// 🔧 REUSABLE FIELD (UI SAME)
+  Widget _field(String hint, TextEditingController controller, IconData icon) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: SizedBox(
+        height: 48,
+        width: double.infinity,
+        child: Profileprofield(
+          text: hint,
+          label: hint,
+          controller: controller,
+          icon: icon,
         ),
       ),
     );

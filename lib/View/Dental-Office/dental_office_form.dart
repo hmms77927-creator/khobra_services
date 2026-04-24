@@ -7,7 +7,6 @@ import '../Widgets/Custom-Container/custom_container.dart';
 import '../Widgets/TextField/app-textfield.dart';
 import 'dental_office_fillup.dart';
 
-
 class FormScreen extends StatefulWidget {
   const FormScreen({super.key});
 
@@ -146,33 +145,9 @@ class _FormScreenState extends State<FormScreen> {
                               phone: phone.text,
                               address: address.text,
                             ));
-                      // await controller.addUser(  firstname.text,
-                      //           lastname.text,
-                      //           phone.text,
-                      //           address.text,
-                      // )),
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => ImageScreen(  name: firstname.text,
-                      //           lastname: lastname.text,
-                      //           phone: phone.text,
-                      //           address: address.text,)),
-                      // );
                     },
                   ),
               ),
-            ),
-        
-            ElevatedButton(
-              onPressed: () {
-                Get.to(() => ImageScreen(
-                  name: name.text,
-                  lastname: lastname.text,
-                  phone: phone.text,
-                  address: address.text,
-                ));
-              },
-              child: const Text("Next"),
             ),
           ],
         ),
