@@ -127,20 +127,6 @@ class _ImageScreenState extends State<ImageScreen> {
               ),
             );
           }),
-          // Obx(() {
-          //   return GestureDetector(
-          //     onTap: () => imgController.pickImage(),
-          //     child: CircleAvatar(
-          //       radius: 60,
-          //       backgroundImage: imgController.imagePath.value.isEmpty
-          //           ? null
-          //           : FileImage(File(imgController.imagePath.value)),
-          //       child: imgController.imagePath.value.isEmpty
-          //           ? const Icon(Icons.add_a_photo)
-          //           : null,
-          //     ),
-          //   );
-          // }),
                     Padding(
           padding: const EdgeInsets.only(top: 160.0, left: 195),
 child: ArrowButton(

@@ -105,6 +105,102 @@ class ProviderModel {
 }
 
 
+// class DriverModel {
+//   String id;
+//   String name;
+//   String username;
+//   String email;
+//   String phone;
+//   String city;
+//   String password;
+//   String image;
+//
+//   DriverModel({
+//     required this.id,
+//     required this.name,
+//     required this.username,
+//     required this.email,
+//     required this.phone,
+//     required this.city,
+//     required this.password,
+//     required this.image,
+//   });
+//
+//   Map<String, dynamic> toMap() {
+//     return {
+//       "name": name,
+//       "username": username,
+//       "email": email,
+//       "phone": phone,
+//       "city": city,
+//       "password": password,
+//       "image": image,
+//     };
+//   }
+//
+//   factory DriverModel.fromMap(Map<String, dynamic> map, String id) {
+//     return DriverModel(
+//       id: id,
+//       name: map["name"] ?? "",
+//       username: map["username"] ?? "",
+//       email: map["email"] ?? "",
+//       phone: map["phone"] ?? "",
+//       city: map["city"] ?? "",
+//       password: map["password"] ?? "",
+//       image: map["image"] ?? "",
+//     );
+//   }
+// }
+
+// class DriverModel {
+//   String id;
+//   String name;
+//   String username;
+//   String email;
+//   String phone;
+//   String city;
+//   String password;
+//   String image;
+//
+//   DriverModel({
+//     required this.id,
+//     required this.name,
+//     required this.username,
+//     required this.email,
+//     required this.phone,
+//     required this.city,
+//     required this.password,
+//     required this.image,
+//   });
+//
+//   Map<String, dynamic> toMap() {
+//     return {
+//       "name": name,
+//       "username": username,
+//       "email": email,
+//       "phone": phone,
+//       "city": city,
+//       "password": password,
+//       "image": image,
+//     };
+//   }
+//
+//   factory DriverModel.fromMap(Map<String, dynamic> map, String id) {
+//     return DriverModel(
+//       id: id,
+//       name: map['name'] ?? '',
+//       username: map['username'] ?? '',
+//       email: map['email'] ?? '',
+//       phone: map['phone'] ?? '',
+//       city: map['city'] ?? '',
+//       password: map['password'] ?? '',
+//       image: map['image'] ?? '',
+//     );
+//   }
+// }
+
+
+
 class DriverModel {
   String id;
   String name;

@@ -1,10 +1,10 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_newproject/Constant/app-colors.dart';
-import 'package:flutter_application_newproject/Constant/app-images.dart';
-import 'package:flutter_application_newproject/View/Provider_side/Booking/book_services.dart';
-import 'package:flutter_application_newproject/View/Widgets/App-Buttons/custom-Buttons.dart';
 import 'package:flutter_application_newproject/View/Widgets/Custom-Container/custom_container.dart';
-import 'package:flutter_application_newproject/View/Widgets/TextField/app-textfield.dart';
+import 'package:get/get.dart';
+
+import '../../../Controller/auth_controller.dart';
 
 class BookList extends StatefulWidget {
   const BookList({super.key});
@@ -14,178 +14,109 @@ class BookList extends StatefulWidget {
 }
 
 class _BookListState extends State<BookList> {
-  TextEditingController searchcontroller = TextEditingController();
-  int selectedIndex = 0;
+  final controller = Get.put(ServiceController());
+
+  @override
+  void initState() {
+    super.initState();
+    controller.fetchServices();
+  }
+
+  /// 🔥 IMAGE FIX
+  Widget buildImage(String image) {
+    if (image.isEmpty) {
+      return Image.asset(
+        "assets/profile.png",
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: 180,
+      );
+    }
+
+    if (image.startsWith("http")) {
+      return Image.network(
+        image,
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: 180,
+        errorBuilder: (_, __, ___) =>
+            Image.asset("assets/profile.png"),
+      );
+    }
+
+    if (image.startsWith("/")) {
+      return Image.file(
+        File(image),
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: 180,
+        errorBuilder: (_, __, ___) =>
+            Image.asset("assets/profile.png"),
+      );
+    }
+
+    return Image.asset(
+      "assets/profile.png",
+      fit: BoxFit.cover,
+      width: double.infinity,
+      height: 180,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: AppBar(
-        title: Text(
-          'Booking',
-          style: TextStyle(
-            color: AppColors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        backgroundColor: AppColors.purple,
-        automaticallyImplyActions: false,
-        automaticallyImplyLeading: false,
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            bookfield(
-              controller: searchcontroller,
-              text: 'Pending',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => BookServices()),
-                );
-              },
+      appBar: AppBar(title: const Text("Bookings")),
+
+      body: Obx(() {
+        final list = controller.serviceList;
+
+        if (list.isEmpty) {
+          return const Center(child: Text("No Services Found"));
+        }
+
+        return ListView.builder(
+          itemCount: list.length,
+          itemBuilder: (context, index) {
+            final item = list[index];
+            return Card(
+              color: AppColors.white,
+              margin: const EdgeInsets.all(10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+            side: BorderSide(width: 0.5,color: AppColors.lightBlack),
             ),
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: CustomBookcontainer(
-                text: 'House Cleaning',
-                subtext: '4517 Washington Ave. Manchester,\n Kentucky 39495',
-                title: '28 Febuary, 2022 at 8:30 AM',
-                subtitle: 'Anna Littlical',
-                onPressed: () {},
-                onTap: () {},
-                image: AppImages.building,
-                description: 'Start',
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  /// 🔥 IMAGE
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: buildImage(item["image"] ?? ""),
+                    ),
+                  ),
+
+                  CustomBookcontainer(
+                    text: item["serviceName"] ?? "",
+                    subtext: item["category"] ?? "",
+                    title: item["address"] ?? "",
+                    subtitle:
+                    "${item["hours"] ?? ''} ${item["minutes"] ?? ''}",
+                    description:
+                    "Status: ${item["status"] ?? "Start"}",
+                    // ignore (we already show above)
+                    onPressed: () {},
+                    onTap: () {},
+                  ),
+                ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: CustomBookcontainer(
-                text: 'House Cleaning',
-                subtext: '4517 Washington Ave. Manchester, Kentucky\n 39495',
-                title: '28 Febuary, 2022 at 8:30 AM',
-                subtitle: 'Anna Littlical',
-                onPressed: () {},
-                onTap: () {},
-                image: AppImages.wiring_3,
-                description: 'Start',
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: CustomBookcontainer(
-                text: 'Electronic Device fixing',
-                subtext: '4517 Washington Ave. Manchester, Kentucky\n 39495',
-                title: '28 Febuary, 2022 at 8:30 AM',
-                subtitle: 'Wiley Waites',
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return Dialog(
-                        backgroundColor: AppColors.white,
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                left: 20.0,
-                                right: 20,
-                              ),
-                              child: Container(
-                                width: 298,
-                                height: 58,
-                                color: AppColors.purple,
-                                child: Row(
-                                  children: [
-                                    head2cont(
-                                      text: 'Assign Driver',
-                                      color: AppColors.white,
-                                    ),
-                                    IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(
-                                        Icons.clear,
-                                        color: AppColors.white,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 18.0),
-                              child: AssignButton(
-                                text: 'John Doe ',
-                                subtitle: 'Member since 2023',
-                                image: AppImages.assign_1,
-                                isSelected: selectedIndex == 1,
-                                onPressed: () {
-                                  setState(() {
-                                    selectedIndex = 1;
-                                  });
-                                },
-                              ),
-                            ),
-                            divicontainer(),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 18.0),
-                              child: AssignButton(
-                                text: 'Fardeen Kashif ',
-                                subtitle: 'Member since 2024',
-                                image: AppImages.assign_2,
-                                isSelected: selectedIndex == 1,
-                                onPressed: () {
-                                  setState(() {
-                                    selectedIndex = 1;
-                                  });
-                                },
-                              ),
-                            ),
-                            divicontainer(),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 18.0),
-                              child: AssignButton(
-                                text: 'Elon Joe',
-                                subtitle: 'Member since 2024',
-                                image: AppImages.assign_3,
-                                isSelected: selectedIndex == 1,
-                                onPressed: () {
-                                  setState(() {
-                                    selectedIndex = 1;
-                                  });
-                                },
-                              ),
-                            ),
-                            divicontainer(),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 18.0),
-                              child: AssignButton(
-                                text: 'William kelesh',
-                                subtitle: 'Member since 2025',
-                                image: AppImages.assign_1,
-                                isSelected: selectedIndex == 1,
-                                onPressed: () {
-                                  setState(() {
-                                    selectedIndex = 1;
-                                  });
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                },
-                onTap: () {},
-                image: AppImages.wiring_4,
-                description: 'Start',
-              ),
-            ),
-          ],
-        ),
-      ),
+            );
+          },
+        );
+      }),
     );
   }
 }

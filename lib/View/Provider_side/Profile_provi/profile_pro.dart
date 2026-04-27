@@ -15,9 +15,7 @@ import 'edit_profile_pro.dart';
 
 class ProfilePro extends StatelessWidget {
   ProfilePro({super.key});
-
   final controller = Get.put(ProviderController());
-
   @override
   Widget build(BuildContext context) {
         return Scaffold(
@@ -40,7 +38,6 @@ class ProfilePro extends StatelessWidget {
           ),
         ),
       ),
-      // ---------------- BODY ----------------
       body: Column(
         children: [
           SizedBox(
@@ -48,20 +45,15 @@ class ProfilePro extends StatelessWidget {
             child: Stack(
               alignment: Alignment.center,
               children: [
-
-                // ---------------- PROFILE DATA ----------------
                 Obx(() {
                   final user = controller.currentProvider.value;
 
                   if (user == null) {
                     return const CircularProgressIndicator();
                   }
-
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-
-                      // PROFILE IMAGE
                       CircleAvatar(
                         radius: 60,
                         backgroundImage: getImage(user.image),
@@ -87,8 +79,6 @@ class ProfilePro extends StatelessWidget {
                     ],
                   );
                 }),
-
-                // ---------------- EDIT BUTTON (TOP RIGHT) ----------------
                 Positioned(
                   top: 20,
                   right: 10,
@@ -146,7 +136,6 @@ class ProfilePro extends StatelessWidget {
                       image: AppImages.catagories,
                     ),
                     Divider(color: AppColors.dividercolor, thickness: 2),
-
                     CustomProfileButton(
                       text: 'My Address',
                       onTap: () {
@@ -172,11 +161,8 @@ class ProfilePro extends StatelessWidget {
                       },
                       image: AppImages.location,
                     ),
-
                     Divider(color: AppColors.dividercolor, thickness: 2),
-
                     Divider(color: AppColors.dividercolor, thickness: 2),
-
                     CustomProfileButton(
                       text: 'Change Password',
                       onTap: () {

@@ -165,3 +165,14 @@ class EditProfilePro extends StatelessWidget {
     );
   }
 }
+
+ /// ✅ UNIVERSAL IMAGE HANDLER
+  ImageProvider getImage(String img) {
+    if (img.isEmpty) {
+      return AssetImage(AppImages.profile_pro);
+    }
+    if (img.startsWith("http")) {
+      return NetworkImage(img);
+    }
+    return FileImage(File(img));
+  }

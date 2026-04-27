@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dotted_decoration/dotted_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_newproject/Constant/app-colors.dart';
@@ -696,7 +698,6 @@ class CustomBookcontainer extends StatelessWidget {
   final VoidCallback onPressed;
   final String description;
   final VoidCallback onTap;
-  final String image;
 
   const CustomBookcontainer({
     super.key,
@@ -706,37 +707,14 @@ class CustomBookcontainer extends StatelessWidget {
     required this.subtitle,
     required this.onPressed,
     required this.onTap,
-    required this.image,
     required this.description,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(width: 0.5, color: AppColors.lightBlack),
-      ),
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 15.0),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Container(
-                width: 303,
-                height: 130,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(image),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ),
-          ),
-
           Padding(
             padding: const EdgeInsets.only(top: 15.0),
             child: Row(

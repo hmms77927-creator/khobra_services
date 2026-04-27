@@ -9,7 +9,6 @@ import 'package:flutter_application_newproject/View/Widgets/Custom-Container/cus
 
 class HomeServicesDetail extends StatefulWidget {
   const HomeServicesDetail({super.key});
-
   @override
   State<HomeServicesDetail> createState() => _HomeServicesDetailState();
 }

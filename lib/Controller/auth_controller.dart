@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -155,15 +157,12 @@ class ProviderController extends GetxController {
 
 
 
-
-
 class DriverController extends GetxController {
-  final repo = DriverRepository();
-
-  var isLoading = false.obs;
   var driverList = <DriverModel>[].obs;
+  var pickedImage = ''.obs;
+  var isLoading = false.obs;
 
-  var pickedImage = "".obs;
+  final firestore = FirebaseFirestore.instance;
 
   @override
   void onInit() {
@@ -171,28 +170,97 @@ class DriverController extends GetxController {
     fetchDrivers();
   }
 
-  void fetchDrivers() {
-    repo.getDrivers().listen((data) {
-      driverList.value = data;
-    });
-  }
-
+  /// PICK IMAGE
   Future<void> pickImage() async {
-    final picker = ImagePicker();
-    final img = await picker.pickImage(source: ImageSource.gallery);
-
-    if (img != null) {
-      pickedImage.value = img.path;
+    final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (picked != null) {
+      pickedImage.value = picked.path;
     }
   }
 
+  /// ADD DRIVER
   Future<void> addDriver(DriverModel driver) async {
     try {
       isLoading.value = true;
-      await repo.addDriver(driver);
+
+      await firestore.collection("drivers").add(driver.toMap());
+
       pickedImage.value = "";
+    } catch (e) {
+      print("ADD ERROR: $e");
     } finally {
       isLoading.value = false;
     }
+  }
+
+  /// FETCH DRIVERS
+  void fetchDrivers() {
+    firestore.collection("drivers").snapshots().listen((snapshot) {
+      driverList.value = snapshot.docs.map((doc) {
+        return DriverModel.fromMap(doc.data(), doc.id);
+      }).toList();
+    });
+  }
+}
+
+
+
+
+// class ServiceController extends GetxController {
+//   FirebaseFirestore firestore = FirebaseFirestore.instance;
+//
+//   var serviceList = [].obs;
+//
+//   /// FETCH
+//   void fetchServices() {
+//     firestore.collection("add_services").snapshots().listen((snapshot) {
+//       serviceList.value = snapshot.docs.map((doc) {
+//         return {
+//           "id": doc.id,
+//           ...doc.data(),
+//         };
+//       }).toList();
+//     });
+//   }
+//
+//   /// ADD
+//   Future<void> addService(Map<String, dynamic> data) async {
+//     await firestore.collection("add_services").add(data);
+//   }
+// }
+
+
+
+
+class ServiceController extends GetxController {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  var serviceList = [].obs;
+  var imagePath = ''.obs;
+
+  /// PICK IMAGE (TEMP)
+  Future<void> pickImage() async {
+    final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (picked != null) {
+      imagePath.value = picked.path;
+    }
+  }
+
+  /// ADD SERVICE
+  Future<void> addService(Map<String, dynamic> data) async {
+    await firestore.collection("add_services").add(data);
+  }
+
+  /// FETCH SERVICES
+  void fetchServices() {
+    firestore.collection("add_services").snapshots().listen((snapshot) {
+      serviceList.value = snapshot.docs.map((doc) {
+        return {
+          "id": doc.id,
+          ...doc.data(),
+        };
+      }).toList();
+    });
   }
 }

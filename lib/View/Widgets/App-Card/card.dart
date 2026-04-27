@@ -1,11 +1,14 @@
 // home card
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_newproject/Constant/app-colors.dart';
 import 'package:flutter_application_newproject/Constant/app-images.dart';
 import 'package:flutter_application_newproject/View/Home/dashboard.dart';
 import 'package:flutter_application_newproject/View/Provider_side/Services/earning_list.dart';
+
+
 
 class HomeCard extends StatelessWidget {
   final String image;
@@ -17,6 +20,7 @@ class HomeCard extends StatelessWidget {
   final String subdescription;
   final VoidCallback onPressed;
   final VoidCallback onTap;
+
   const HomeCard({
     super.key,
     required this.image,
@@ -30,147 +34,327 @@ class HomeCard extends StatelessWidget {
     required this.onTap,
   });
 
+  /// 🔥 Smart Image Handler (no error)
+  Widget buildImage() {
+    if (image.isEmpty) {
+      return Image.asset("assets/profile.png", fit: BoxFit.cover);
+    } else if (image.startsWith("http")) {
+      return Image.network(
+        image,
+        fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) =>
+            Image.asset("assets/profile.png"),
+      );
+    } else if (image.startsWith("/")) {
+      return Image.file(
+        File(image),
+        fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) =>
+            Image.asset("assets/profile.png"),
+      );
+    } else {
+      return Image.asset("assets/profile.png", fit: BoxFit.cover);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
       color: AppColors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: Row(
         children: [
+          /// 🔥 LEFT IMAGE
           GestureDetector(
             onTap: onTap,
             child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                bottomLeft: Radius.circular(20),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                bottomLeft: Radius.circular(12),
               ),
-              child: Image.asset(
-                image,
+              child: SizedBox(
                 height: 130,
                 width: 130,
-                fit: BoxFit.cover,
+                child: buildImage(),
               ),
             ),
           ),
-          Column(
-            children: [
-              Container(
-                child: Text(
-                  text,
-                  style: TextStyle(
-                    color: AppColors.pureblack,
-                    fontSize: 12,
-                    fontWeight: .w700,
+
+          /// 🔥 CENTER CONTENT
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    text,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14,
+                      color: AppColors.pureblack,
+                    ),
                   ),
-                ),
-              ),
-              Container(
-                child: Text(
-                  subtext,
-                  style: TextStyle(
-                    color: AppColors.black,
-                    fontSize: 12,
-                    fontWeight: .w600,
+                  const SizedBox(height: 4),
+
+                  Text(
+                    subtext,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: AppColors.black,
+                    ),
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10.0),
-                child: Container(
-                  child: Text(
+
+                  const SizedBox(height: 6),
+
+                  Text(
                     title,
                     style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
                       color: AppColors.lightYellow,
-                      fontSize: 17,
-                      fontWeight: .w800,
                     ),
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 40.0),
-                child: Row(
-                  children: [
-                    Icon(Icons.star, color: AppColors.yellow),
-                    Container(
-                      child: Text(
+
+                  const SizedBox(height: 10),
+
+                  Row(
+                    children: [
+                      Icon(Icons.star, size: 16, color: AppColors.yellow),
+                      const SizedBox(width: 4),
+                      Text(
                         subtitle,
                         style: TextStyle(
-                          color: AppColors.black,
-                          fontSize: 11,
-                          fontWeight: .w800,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        description,
+                        style: TextStyle(fontSize: 11),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          /// 🔥 RIGHT SIDE (BUTTONS)
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(Icons.bookmark, color: AppColors.darkblue),
+                ),
+
+                Column(
+                  children: [
+                    SizedBox(
+                      width: 100,
+                      height: 32,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.green,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                        ),
+                        onPressed: onPressed,
+                        child: const Text(
+                          'Book Now',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ),
                     ),
-                    Container(
-                      child: Text(
-                        description,
-                        style: TextStyle(
-                          color: AppColors.black,
-                          fontSize: 11,
-                          fontWeight: .w800,
-                        ),
-                      ),
+                    const SizedBox(height: 4),
+                    Text(
+                      subdescription,
+                      style: TextStyle(fontSize: 10),
                     ),
                   ],
                 ),
-              ),
-            ],
-          ),
-          Column(
-            children: [
-              Container(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.bookmark, color: AppColors.darkblue),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20.0, left: 7),
-                child: SizedBox(
-                  width: 110,
-                  height: 30,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.green,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadiusGeometry.circular(5),
-                      ),
-                    ),
-                    onPressed: onPressed,
-                    child: Text(
-                      'Book Now',
-                      style: TextStyle(
-                        fontWeight: .w800,
-                        fontSize: 12,
-                        color: AppColors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 3.0),
-                child: Container(
-                  child: Text(
-                    subdescription,
-                    style: TextStyle(
-                      color: AppColors.black,
-                      fontSize: 8,
-                      fontWeight: .w500,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
     );
   }
 }
+// class HomeCard extends StatelessWidget {
+//   final String image;
+//   final String text;
+//   final String subtext;
+//   final String title;
+//   final String subtitle;
+//   final String description;
+//   final String subdescription;
+//   final VoidCallback onPressed;
+//   final VoidCallback onTap;
+//   const HomeCard({
+//     super.key,
+//     required this.image,
+//     required this.text,
+//     required this.subtext,
+//     required this.title,
+//     required this.subtitle,
+//     required this.description,
+//     required this.subdescription,
+//     required this.onPressed,
+//     required this.onTap,
+//   });
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Card(
+//       color: AppColors.white,
+//       child: Row(
+//         children: [
+//           GestureDetector(
+//             onTap: onTap,
+//             child: ClipRRect(
+//               borderRadius: BorderRadius.only(
+//                 topLeft: Radius.circular(20),
+//                 bottomLeft: Radius.circular(20),
+//               ),
+//               child: Image.asset(
+//                 image,
+//                 height: 130,
+//                 width: 130,
+//                 fit: BoxFit.cover,
+//               ),
+//             ),
+//           ),
+//           Column(
+//             children: [
+//               Container(
+//                 child: Text(
+//                   text,
+//                   style: TextStyle(
+//                     color: AppColors.pureblack,
+//                     fontSize: 12,
+//                     fontWeight: .w700,
+//                   ),
+//                 ),
+//               ),
+//               Container(
+//                 child: Text(
+//                   subtext,
+//                   style: TextStyle(
+//                     color: AppColors.black,
+//                     fontSize: 12,
+//                     fontWeight: .w600,
+//                   ),
+//                 ),
+//               ),
+//               Padding(
+//                 padding: const EdgeInsets.only(left: 10.0),
+//                 child: Container(
+//                   child: Text(
+//                     title,
+//                     style: TextStyle(
+//                       color: AppColors.lightYellow,
+//                       fontSize: 17,
+//                       fontWeight: .w800,
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//               Padding(
+//                 padding: const EdgeInsets.only(top: 40.0),
+//                 child: Row(
+//                   children: [
+//                     Icon(Icons.star, color: AppColors.yellow),
+//                     Container(
+//                       child: Text(
+//                         subtitle,
+//                         style: TextStyle(
+//                           color: AppColors.black,
+//                           fontSize: 11,
+//                           fontWeight: .w800,
+//                         ),
+//                       ),
+//                     ),
+//                     Container(
+//                       child: Text(
+//                         description,
+//                         style: TextStyle(
+//                           color: AppColors.black,
+//                           fontSize: 11,
+//                           fontWeight: .w800,
+//                         ),
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ],
+//           ),
+//           Column(
+//             children: [
+//               Container(
+//                 child: Padding(
+//                   padding: const EdgeInsets.only(top: 10.0),
+//                   child: IconButton(
+//                     onPressed: () {},
+//                     icon: Icon(Icons.bookmark, color: AppColors.darkblue),
+//                   ),
+//                 ),
+//               ),
+//               Padding(
+//                 padding: const EdgeInsets.only(top: 20.0, left: 7),
+//                 child: SizedBox(
+//                   width: 110,
+//                   height: 30,
+//                   child: ElevatedButton(
+//                     style: ElevatedButton.styleFrom(
+//                       backgroundColor: AppColors.green,
+//                       shape: RoundedRectangleBorder(
+//                         borderRadius: BorderRadiusGeometry.circular(5),
+//                       ),
+//                     ),
+//                     onPressed: onPressed,
+//                     child: Text(
+//                       'Book Now',
+//                       style: TextStyle(
+//                         fontWeight: .w800,
+//                         fontSize: 12,
+//                         color: AppColors.white,
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//               Padding(
+//                 padding: const EdgeInsets.only(top: 3.0),
+//                 child: Container(
+//                   child: Text(
+//                     subdescription,
+//                     style: TextStyle(
+//                       color: AppColors.black,
+//                       fontSize: 8,
+//                       fontWeight: .w500,
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 // Dashboard Card
 class DashboardCard extends StatelessWidget {
@@ -1030,203 +1214,196 @@ class booknotifi extends StatelessWidget {
 }
 
 // handyman
+
 class handymancard extends StatelessWidget {
-  final String image;
   final String text;
-  final String buttontext;
-  final String subbuttontext;
   final String subtext;
   final String title;
   final String subtitle;
+  final String image;
   final Color color;
   final Color textcolor;
+  final String buttontext;
+  final String subbuttontext;
   final VoidCallback onPressed;
   final VoidCallback onTap;
-  final VoidCallback onDoubleTap;
+
   const handymancard({
     super.key,
     required this.text,
     required this.subtext,
     required this.title,
     required this.subtitle,
+    required this.image,
     required this.color,
     required this.textcolor,
-    required this.onPressed,
-    required this.image,
     required this.buttontext,
     required this.subbuttontext,
+    required this.onPressed,
     required this.onTap,
-    required this.onDoubleTap, required Widget imageWidget,
   });
+
+  /// 🔥 SAFE IMAGE HANDLER
+  Widget buildImage(String img) {
+    if (img.isEmpty) {
+      return const CircleAvatar(
+        radius: 40,
+        backgroundImage: AssetImage("assets/profile.png"),
+      );
+    }
+
+    if (img.startsWith("http")) {
+      return CircleAvatar(
+        radius: 40,
+        backgroundImage: NetworkImage(img),
+      );
+    }
+
+    if (img.startsWith("/")) {
+      return CircleAvatar(
+        radius: 40,
+        backgroundImage: FileImage(File(img)),
+      );
+    }
+
+    return const CircleAvatar(
+      radius: 40,
+      backgroundImage: AssetImage("assets/profile.png"),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
-        height: 247,
+        height: 250,
         width: 334,
         child: Card(
-          color: AppColors.fieldcolor,
+          color: AppColors.white,
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           child: Column(
-            crossAxisAlignment: .start,
             children: [
-              Row(
-                mainAxisAlignment: .start,
-                crossAxisAlignment: .start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 18, left: 10),
-                    child: CircleAvatar(
-                      radius: 40,
-                      backgroundImage: AssetImage(image),
-                    ),
-                  ),
-                  Column(
-                    crossAxisAlignment: .start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15.0),
-                        child: Row(
-                          mainAxisAlignment: .spaceBetween,
-                          children: [
-                            Container(
-                              child: Text(
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    buildImage(image),
+
+                    const SizedBox(width: 10),
+
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // NAME + MENU
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
                                 text,
                                 style: TextStyle(
                                   color: textcolor,
                                   fontSize: 18,
-                                  fontWeight: .w500,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
-                            ),
+                              IconButton(
+                                onPressed: onPressed,
+                                icon: const Icon(Icons.more_horiz),
+                              ),
+                            ],
+                          ),
 
-                            Padding(
-                              padding: const EdgeInsets.only(left: 30.0),
-                              child: Container(
-                                child: IconButton(
-                                  onPressed: onPressed,
-                                  icon: Icon(Icons.more_horiz),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15.0),
-                        child: Row(
-                          children: [
-                            Icon(Icons.email),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Container(
-                                child: Text(
-                                  subtext,
-                                  style: TextStyle(
-                                    color: color,
-                                    fontSize: 14,
-                                    fontWeight: .w500,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15.0),
-                        child: Row(
-                          children: [
-                            Icon(Icons.location_on),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Container(
-                                child: Text(
-                                  title,
-                                  style: TextStyle(
-                                    color: color,
-                                    fontSize: 14,
-                                    fontWeight: .w500,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15.0),
-                        child: Row(
-                          children: [
-                            Icon(Icons.call),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Container(
-                                child: Text(
-                                  subtitle,
-                                  style: TextStyle(
-                                    color: color,
-                                    fontSize: 14,
-                                    fontWeight: .w500,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 35.0),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0),
-                      child: SizedBox(
-                        height: 38,
-                        width: 134,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.purple,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadiusGeometry.circular(5),
-                            ),
+                          const SizedBox(height: 5),
+
+                          // EMAIL
+                          Row(
+                            children: [
+                              const Icon(Icons.email, size: 18),
+                              const SizedBox(width: 8),
+                              Text(subtext),
+                            ],
                           ),
-                          onPressed: onTap,
-                          child: Text(
-                            subbuttontext,
-                            style: TextStyle(
-                              color: AppColors.white,
-                              fontSize: 14,
-                              fontWeight: .w500,
-                            ),
+
+                          const SizedBox(height: 5),
+
+                          // LOCATION
+                          Row(
+                            children: [
+                              const Icon(Icons.location_on, size: 18),
+                              const SizedBox(width: 8),
+                              Text(title),
+                            ],
                           ),
-                        ),
+
+                          const SizedBox(height: 5),
+
+                          // PHONE
+                          Row(
+                            children: [
+                              const Icon(Icons.call, size: 18),
+                              const SizedBox(width: 8),
+                              Text(subtitle),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0),
-                      child: SizedBox(
-                        height: 38,
-                        width: 134,
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            backgroundColor: AppColors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadiusGeometry.circular(5),
-                            ),
+                  ],
+                ),
+              ),
+
+              const Spacer(),
+
+              // ================= BUTTONS =================
+              Padding(
+                padding: const EdgeInsets.only(bottom: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 38,
+                      width: 134,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.purple,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
                           ),
-                          onPressed: onDoubleTap,
-                          child: Text(
-                            buttontext,
-                            style: TextStyle(
-                              color: AppColors.black,
-                              fontSize: 14,
-                              fontWeight: .w500,
-                            ),
+                        ),
+                        onPressed: onTap,
+                        child: Text(subbuttontext, style: TextStyle(
+                          color: AppColors.white,
+                          fontSize: 14,
+                          fontWeight: .w500,
+                        ),),
+                      ),
+                    ),
+
+                    const SizedBox(width: 10),
+
+                    SizedBox(
+                      height: 38,
+                      width: 134,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          side: const BorderSide(color: Colors.black),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                        onPressed: onTap,
+                        child: Text(
+                          buttontext,
+                          style:TextStyle(
+                            color: AppColors.black,
+                            fontSize: 14,
+                            fontWeight: .w500,
                           ),
                         ),
                       ),
@@ -1241,6 +1418,216 @@ class handymancard extends StatelessWidget {
     );
   }
 }
+// class handymancard extends StatelessWidget {
+//   final String image;
+//   final String text;
+//   final String buttontext;
+//   final String subbuttontext;
+//   final String subtext;
+//   final String title;
+//   final String subtitle;
+//   final Color color;
+//   final Color textcolor;
+//   final VoidCallback onPressed;
+//   final VoidCallback onTap;
+//
+//   const handymancard({
+//     super.key,
+//     required this.text,
+//     required this.subtext,
+//     required this.title,
+//     required this.subtitle,
+//     required this.color,
+//     required this.textcolor,
+//     required this.onPressed,
+//     required this.image,
+//     required this.buttontext,
+//     required this.subbuttontext,
+//     required this.onTap,
+//   });
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Center(
+//       child: SizedBox(
+//         height: 247,
+//         width: 334,
+//         child: Card(
+//           color: AppColors.fieldcolor,
+//           child: Column(
+//             crossAxisAlignment: .start,
+//             children: [
+//               Row(
+//                 mainAxisAlignment: .start,
+//                 crossAxisAlignment: .start,
+//                 children: [
+//                   Padding(
+//                     padding: const EdgeInsets.only(top: 18, left: 10),
+//                     child: CircleAvatar(
+//                       radius: 40,
+//                       backgroundImage: AssetImage(image),
+//                     ),
+//                   ),
+//                   Column(
+//                     crossAxisAlignment: .start,
+//                     children: [
+//                       Padding(
+//                         padding: const EdgeInsets.only(left: 15.0),
+//                         child: Row(
+//                           mainAxisAlignment: .spaceBetween,
+//                           children: [
+//                             Container(
+//                               child: Text(
+//                                 text,
+//                                 style: TextStyle(
+//                                   color: textcolor,
+//                                   fontSize: 18,
+//                                   fontWeight: .w500,
+//                                 ),
+//                               ),
+//                             ),
+//
+//                             Padding(
+//                               padding: const EdgeInsets.only(left: 30.0),
+//                               child: Container(
+//                                 child: IconButton(
+//                                   onPressed: onPressed,
+//                                   icon: Icon(Icons.more_horiz),
+//                                 ),
+//                               ),
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                       Padding(
+//                         padding: const EdgeInsets.only(left: 15.0),
+//                         child: Row(
+//                           children: [
+//                             Icon(Icons.email),
+//                             Padding(
+//                               padding: const EdgeInsets.only(left: 10.0),
+//                               child: Container(
+//                                 child: Text(
+//                                   subtext,
+//                                   style: TextStyle(
+//                                     color: color,
+//                                     fontSize: 14,
+//                                     fontWeight: .w500,
+//                                   ),
+//                                 ),
+//                               ),
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                       Padding(
+//                         padding: const EdgeInsets.only(left: 15.0),
+//                         child: Row(
+//                           children: [
+//                             Icon(Icons.location_on),
+//                             Padding(
+//                               padding: const EdgeInsets.only(left: 10.0),
+//                               child: Container(
+//                                 child: Text(
+//                                   title,
+//                                   style: TextStyle(
+//                                     color: color,
+//                                     fontSize: 14,
+//                                     fontWeight: .w500,
+//                                   ),
+//                                 ),
+//                               ),
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                       Padding(
+//                         padding: const EdgeInsets.only(left: 15.0),
+//                         child: Row(
+//                           children: [
+//                             Icon(Icons.call),
+//                             Padding(
+//                               padding: const EdgeInsets.only(left: 10.0),
+//                               child: Container(
+//                                 child: Text(
+//                                   subtitle,
+//                                   style: TextStyle(
+//                                     color: color,
+//                                     fontSize: 14,
+//                                     fontWeight: .w500,
+//                                   ),
+//                                 ),
+//                               ),
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ],
+//               ),
+//               Padding(
+//                 padding: const EdgeInsets.only(top: 35.0),
+//                 child: Row(
+//                   children: [
+//                     Padding(
+//                       padding: const EdgeInsets.only(left: 15.0),
+//                       child: SizedBox(
+//                         height: 38,
+//                         width: 134,
+//                         child: ElevatedButton(
+//                           style: ElevatedButton.styleFrom(
+//                             backgroundColor: AppColors.purple,
+//                             shape: RoundedRectangleBorder(
+//                               borderRadius: BorderRadiusGeometry.circular(5),
+//                             ),
+//                           ),
+//                           onPressed: onTap,
+//                           child: Text(
+//                             subbuttontext,
+//                             style: TextStyle(
+//                               color: AppColors.white,
+//                               fontSize: 14,
+//                               fontWeight: .w500,
+//                             ),
+//                           ),
+//                         ),
+//                       ),
+//                     ),
+//                     Padding(
+//                       padding: const EdgeInsets.only(left: 15.0),
+//                       child: SizedBox(
+//                         height: 38,
+//                         width: 134,
+//                         // child: TextButton(
+//                         //   style: TextButton.styleFrom(
+//                         //     backgroundColor: AppColors.white,
+//                         //     shape: RoundedRectangleBorder(
+//                         //       borderRadius: BorderRadiusGeometry.circular(5),
+//                         //     ),
+//                         //   ),
+//                         //   onPressed: onDoubleTap,
+//                         //   child: Text(
+//                         //     buttontext,
+//                         //     style: TextStyle(
+//                         //       color: AppColors.black,
+//                         //       fontSize: 14,
+//                         //       fontWeight: .w500,
+//                         //     ),
+//                         //   ),
+//                         // ),
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 // customer Review Card
 class customerReviewcard extends StatelessWidget {
