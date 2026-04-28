@@ -5,6 +5,8 @@ import 'package:flutter_application_newproject/View/Widgets/Custom-Container/cus
 import 'package:get/get.dart';
 
 import '../../../Controller/auth_controller.dart';
+import '../../Widgets/TextField/app-textfield.dart';
+import 'book_services.dart';
 
 class BookList extends StatefulWidget {
   const BookList({super.key});
@@ -14,6 +16,7 @@ class BookList extends StatefulWidget {
 }
 
 class _BookListState extends State<BookList> {
+  TextEditingController searchcontroller = TextEditingController();
   final controller = Get.put(ServiceController());
 
   @override
@@ -21,8 +24,6 @@ class _BookListState extends State<BookList> {
     super.initState();
     controller.fetchServices();
   }
-
-  /// 🔥 IMAGE FIX
   Widget buildImage(String image) {
     if (image.isEmpty) {
       return Image.asset(
@@ -67,18 +68,43 @@ class _BookListState extends State<BookList> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: AppBar(title: const Text("Bookings")),
-
+      appBar: AppBar(
+        title: Text(
+          'Booking',
+          style: TextStyle(
+            color: AppColors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        backgroundColor: AppColors.purple,
+        automaticallyImplyActions: false,
+        automaticallyImplyLeading: false,
+      ),
       body: Obx(() {
         final list = controller.serviceList;
 
         if (list.isEmpty) {
           return const Center(child: Text("No Services Found"));
         }
-
         return ListView.builder(
           itemCount: list.length,
           itemBuilder: (context, index) {
+            if (index == 0) {
+              return Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: bookfield(
+                  controller: searchcontroller,
+                  text: 'Pending',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => BookServices()),
+                    );
+                  },
+                ),
+              );
+            }
             final item = list[index];
             return Card(
               color: AppColors.white,
@@ -90,7 +116,6 @@ class _BookListState extends State<BookList> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  /// 🔥 IMAGE
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: ClipRRect(
@@ -98,7 +123,6 @@ class _BookListState extends State<BookList> {
                       child: buildImage(item["image"] ?? ""),
                     ),
                   ),
-
                   CustomBookcontainer(
                     text: item["serviceName"] ?? "",
                     subtext: item["category"] ?? "",
@@ -107,7 +131,6 @@ class _BookListState extends State<BookList> {
                     "${item["hours"] ?? ''} ${item["minutes"] ?? ''}",
                     description:
                     "Status: ${item["status"] ?? "Start"}",
-                    // ignore (we already show above)
                     onPressed: () {},
                     onTap: () {},
                   ),

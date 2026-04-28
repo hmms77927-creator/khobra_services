@@ -10,7 +10,7 @@ class AssignPage extends StatefulWidget {
 }
 
 class _AssignPageState extends State<AssignPage> {
-  int selectedIndex = 0; // track selected button
+  int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {

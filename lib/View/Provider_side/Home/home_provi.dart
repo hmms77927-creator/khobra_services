@@ -3,6 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_newproject/Constant/app-colors.dart';
 import 'package:flutter_application_newproject/Constant/app-images.dart';
 import 'package:flutter_application_newproject/View/Widgets/Custom-Container/custom_container.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
+
+import '../Booking/book_list.dart';
+import '../Booking/book_services.dart';
+import '../Handyman/handyman_list.dart';
 
 class HomeProvi extends StatefulWidget {
   const HomeProvi({super.key});
@@ -43,12 +49,14 @@ class _HomeProviState extends State<HomeProvi> {
                       homeProvidercontain(
                         text: '98',
                         title: 'Total Booking',
-                        image: AppImages.ticket,
+                        image: AppImages.ticket, onTap: () {
+                          Get.to(BookServices());
+                      },
                       ),
                       homeProvidercontain(
                         text: '15',
                         title: 'Total Service',
-                        image: AppImages.document,
+                        image: AppImages.document, onTap: () { Get.to(BookList()); },
                       ),
                     ],
                   ),
@@ -58,13 +66,15 @@ class _HomeProviState extends State<HomeProvi> {
                     children: [
                       homeProvidercontain(
                         text: '30',
-                        title: 'Driver',
+                      onTap: () { Get.to( HandymanList()); }   ,title: 'Driver',
                         image: AppImages.home_3,
                       ),
                       homeProvidercontain(
                         text: '₹45.3',
                         title: 'Total Earning',
                         image: AppImages.discount,
+                        onTap: () { Get.to(BookList());
+                      },
                       ),
                     ],
                   ),

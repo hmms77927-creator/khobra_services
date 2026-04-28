@@ -978,69 +978,73 @@ class homeProvidercontain extends StatelessWidget {
   final String text;
   final String title;
   final String image;
+  final VoidCallback onTap;
   const homeProvidercontain({
     super.key,
     required this.text,
     required this.title,
-    required this.image,
+    required this.image, required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 157,
-      height: 86,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        border: Border.all(width: 1, color: AppColors.dividercolor),
-      ),
-      child: Column(
-        crossAxisAlignment: .start,
-        children: [
-          Row(
-            mainAxisAlignment: .start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 15.0, top: 10),
-                child: Container(
-                  child: Text(
-                    text,
-                    style: TextStyle(
-                      color: AppColors.purple,
-                      fontSize: 22,
-                      fontWeight: .w600,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 157,
+        height: 86,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          border: Border.all(width: 1, color: AppColors.dividercolor),
+        ),
+        child: Column(
+          crossAxisAlignment: .start,
+          children: [
+            Row(
+              mainAxisAlignment: .start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 15.0, top: 10),
+                  child: Container(
+                    child: Text(
+                      text,
+                      style: TextStyle(
+                        color: AppColors.purple,
+                        fontSize: 22,
+                        fontWeight: .w600,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20.0, top: 10),
-                child: Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: AppColors.fieldcolor,
-                    borderRadius: BorderRadius.circular(35),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20.0, top: 10),
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: AppColors.fieldcolor,
+                      borderRadius: BorderRadius.circular(35),
+                    ),
+                    child: Image.asset(image),
                   ),
-                  child: Image.asset(image),
                 ),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 15.0),
-            child: Container(
-              child: Text(
-                title,
-                style: TextStyle(
-                  color: AppColors.fullgrey,
-                  fontSize: 12,
-                  fontWeight: .w500,
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 15.0),
+              child: Container(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    color: AppColors.fullgrey,
+                    fontSize: 12,
+                    fontWeight: .w500,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

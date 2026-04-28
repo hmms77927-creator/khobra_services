@@ -54,76 +54,80 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ],
       ),
-      body: Center(
-        child: Obx(() {
-          final user = controller.currentUser.value;
-          if (user == null) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircleAvatar(
-                radius: 60,
-                backgroundImage: user.image != null && user.image.isNotEmpty
-                    ? FileImage(File(user.image))
-                    : const AssetImage("assets/profile.png") as ImageProvider,
-              ),
-              const SizedBox(height: 10),
-              Text(
-                user.name,
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              ProfileText(
-                text: 'Created : 5/Febuary/2025',
-                color: AppColors.lightBlack,
-              ),
+      body: Column(
+        children: [
+          Center(
+            child: Obx(() {
+              final user = controller.currentUser.value;
+              if (user == null) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 60,
+                    backgroundImage: user.image != null && user.image.isNotEmpty
+                        ? FileImage(File(user.image))
+                        : const AssetImage("assets/profile.png") as ImageProvider,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    user.name,
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  ProfileText(
+                    text: 'Created : 5/Febuary/2025',
+                    color: AppColors.lightBlack,
+                  ),
 
-              const SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
-              ProfileButton(
-                text: 'Edit Profile',
-                image: AppImages.Edit,
-                w: 16,
-                h: 20,
-                onTap: () {
-                  Get.to(() => FormScreen());
-                },
-              ),
+                  ProfileButton(
+                    text: 'Edit Profile',
+                    image: AppImages.Edit,
+                    w: 16,
+                    h: 20,
+                    onTap: () {
+                      Get.to(() => FormScreen());
+                    },
+                  ),
 
-              ProfileButton(
-                text: 'Terms & Conditions',
-                image: 'assets/icons/Protection.svg',
-                w: 16,
-                h: 18,
-                onTap: () {},
-              ),
+                  ProfileButton(
+                    text: 'Terms & Conditions',
+                    image: 'assets/icons/Protection.svg',
+                    w: 16,
+                    h: 18,
+                    onTap: () {},
+                  ),
 
-              ProfileButton(
-                text: 'Help Center',
-                image: 'assets/icons/helpcenter.svg',
-                w: 19,
-                h: 19,
-                onTap: () {},
-              ),
+                  ProfileButton(
+                    text: 'Help Center',
+                    image: 'assets/icons/helpcenter.svg',
+                    w: 19,
+                    h: 19,
+                    onTap: () {},
+                  ),
 
-              ProfileButton(
-                text: 'Logout',
-                image: 'assets/icons/logout.png',
-                w: 15,
-                h: 13,
-                onTap: () {},
-              ),
+                  ProfileButton(
+                    text: 'Logout',
+                    image: 'assets/icons/logout.png',
+                    w: 15,
+                    h: 13,
+                    onTap: () {},
+                  ),
 
-              const SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
-              DeleteButton(
-                text: 'Delete Account',
-                onTap: () {},
-              ),
-            ],
-          );
-        }),
+                  DeleteButton(
+                    text: 'Delete Account',
+                    onTap: () {},
+                  ),
+                ],
+              );
+            }),
+          ),
+        ],
       ),
     );
   }

@@ -2,11 +2,12 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_newproject/Constant/app-colors.dart';
-import 'package:flutter_application_newproject/Constant/app-images.dart';
-import 'package:flutter_application_newproject/View/Home/dashboard.dart';
-import 'package:flutter_application_newproject/View/Provider_side/Services/earning_list.dart';
+
+import '../../../Constant/app-colors.dart';
+import '../../../Constant/app-images.dart';
+import '../../Provider_side/Services/earning_list.dart';
 
 
 
@@ -30,11 +31,9 @@ class HomeCard extends StatelessWidget {
     required this.subtitle,
     required this.description,
     required this.subdescription,
-    required this.onPressed,
-    required this.onTap,
+    required this.onPressed, required this.onTap,
   });
 
-  /// 🔥 Smart Image Handler (no error)
   Widget buildImage() {
     if (image.isEmpty) {
       return Image.asset("assets/profile.png", fit: BoxFit.cover);
@@ -59,302 +58,138 @@ class HomeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: AppColors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          /// 🔥 LEFT IMAGE
-          GestureDetector(
-            onTap: onTap,
-            child: ClipRRect(
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 130,
+        margin: const EdgeInsets.only(bottom: 12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: const [
+            BoxShadow(color: Colors.black12, blurRadius: 4),
+          ],
+        ),
+
+        child: Row(
+          children: [
+
+            /// IMAGE (FIXED)
+            ClipRRect(
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(12),
                 bottomLeft: Radius.circular(12),
               ),
               child: SizedBox(
-                height: 130,
-                width: 130,
+                width: 120,
+                height: double.infinity,
                 child: buildImage(),
               ),
             ),
-          ),
 
-          /// 🔥 CENTER CONTENT
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    text,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14,
-                      color: AppColors.pureblack,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
+            /// RIGHT SIDE
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 8, vertical: 6),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
 
-                  Text(
-                    subtext,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: AppColors.black,
-                    ),
-                  ),
-
-                  const SizedBox(height: 6),
-
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.lightYellow,
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  Row(
-                    children: [
-                      Icon(Icons.star, size: 16, color: AppColors.yellow),
-                      const SizedBox(width: 4),
-                      Text(
-                        subtitle,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        description,
-                        style: TextStyle(fontSize: 11),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          /// 🔥 RIGHT SIDE (BUTTONS)
-          Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.bookmark, color: AppColors.darkblue),
-                ),
-
-                Column(
                   children: [
-                    SizedBox(
-                      width: 100,
-                      height: 32,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.green,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                        ),
-                        onPressed: onPressed,
-                        child: const Text(
-                          'Book Now',
-                          style: TextStyle(
-                            fontSize: 12,
+
+                    /// TOP CONTENT
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+
+                        Text(
+                          text,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
                             fontWeight: FontWeight.w700,
+                            fontSize: 14,
                           ),
                         ),
-                      ),
+
+
+                        Text(
+                          subtext,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontSize: 12),
+                        ),
+
+                        Text(
+                          title,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w800,
+                            color:AppColors.lightYellow ,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      subdescription,
-                      style: TextStyle(fontSize: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Row(
+                            children: [
+                              const Icon(Icons.star,
+                                  size: 14, color: Colors.orange),
+                              Flexible(
+                                child: Text(
+                                  "$subtitle • $description • $subdescription",
+                                  // overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(fontSize: 11),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
+              ),
+            ),
+            Column(
+              children: [
+                Icon(Icons.bookmark,
+                    color: AppColors.darkblue),
+                SizedBox(
+                  width: 80,
+                  height: 60,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top:30.0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.green,
+                        padding: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                      onPressed: onPressed,
+                      child: const Text(
+                        "Book Now",
+                        style: TextStyle(fontSize: 12,fontWeight: FontWeight.w800,color: AppColors.white),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
-          ),
-        ],
+
+          ],
+        ),
       ),
     );
   }
 }
-// class HomeCard extends StatelessWidget {
-//   final String image;
-//   final String text;
-//   final String subtext;
-//   final String title;
-//   final String subtitle;
-//   final String description;
-//   final String subdescription;
-//   final VoidCallback onPressed;
-//   final VoidCallback onTap;
-//   const HomeCard({
-//     super.key,
-//     required this.image,
-//     required this.text,
-//     required this.subtext,
-//     required this.title,
-//     required this.subtitle,
-//     required this.description,
-//     required this.subdescription,
-//     required this.onPressed,
-//     required this.onTap,
-//   });
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Card(
-//       color: AppColors.white,
-//       child: Row(
-//         children: [
-//           GestureDetector(
-//             onTap: onTap,
-//             child: ClipRRect(
-//               borderRadius: BorderRadius.only(
-//                 topLeft: Radius.circular(20),
-//                 bottomLeft: Radius.circular(20),
-//               ),
-//               child: Image.asset(
-//                 image,
-//                 height: 130,
-//                 width: 130,
-//                 fit: BoxFit.cover,
-//               ),
-//             ),
-//           ),
-//           Column(
-//             children: [
-//               Container(
-//                 child: Text(
-//                   text,
-//                   style: TextStyle(
-//                     color: AppColors.pureblack,
-//                     fontSize: 12,
-//                     fontWeight: .w700,
-//                   ),
-//                 ),
-//               ),
-//               Container(
-//                 child: Text(
-//                   subtext,
-//                   style: TextStyle(
-//                     color: AppColors.black,
-//                     fontSize: 12,
-//                     fontWeight: .w600,
-//                   ),
-//                 ),
-//               ),
-//               Padding(
-//                 padding: const EdgeInsets.only(left: 10.0),
-//                 child: Container(
-//                   child: Text(
-//                     title,
-//                     style: TextStyle(
-//                       color: AppColors.lightYellow,
-//                       fontSize: 17,
-//                       fontWeight: .w800,
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//               Padding(
-//                 padding: const EdgeInsets.only(top: 40.0),
-//                 child: Row(
-//                   children: [
-//                     Icon(Icons.star, color: AppColors.yellow),
-//                     Container(
-//                       child: Text(
-//                         subtitle,
-//                         style: TextStyle(
-//                           color: AppColors.black,
-//                           fontSize: 11,
-//                           fontWeight: .w800,
-//                         ),
-//                       ),
-//                     ),
-//                     Container(
-//                       child: Text(
-//                         description,
-//                         style: TextStyle(
-//                           color: AppColors.black,
-//                           fontSize: 11,
-//                           fontWeight: .w800,
-//                         ),
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             ],
-//           ),
-//           Column(
-//             children: [
-//               Container(
-//                 child: Padding(
-//                   padding: const EdgeInsets.only(top: 10.0),
-//                   child: IconButton(
-//                     onPressed: () {},
-//                     icon: Icon(Icons.bookmark, color: AppColors.darkblue),
-//                   ),
-//                 ),
-//               ),
-//               Padding(
-//                 padding: const EdgeInsets.only(top: 20.0, left: 7),
-//                 child: SizedBox(
-//                   width: 110,
-//                   height: 30,
-//                   child: ElevatedButton(
-//                     style: ElevatedButton.styleFrom(
-//                       backgroundColor: AppColors.green,
-//                       shape: RoundedRectangleBorder(
-//                         borderRadius: BorderRadiusGeometry.circular(5),
-//                       ),
-//                     ),
-//                     onPressed: onPressed,
-//                     child: Text(
-//                       'Book Now',
-//                       style: TextStyle(
-//                         fontWeight: .w800,
-//                         fontSize: 12,
-//                         color: AppColors.white,
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//               Padding(
-//                 padding: const EdgeInsets.only(top: 3.0),
-//                 child: Container(
-//                   child: Text(
-//                     subdescription,
-//                     style: TextStyle(
-//                       color: AppColors.black,
-//                       fontSize: 8,
-//                       fontWeight: .w500,
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+
+
 
 // Dashboard Card
 class DashboardCard extends StatelessWidget {
@@ -831,12 +666,15 @@ class BookedCard extends StatelessWidget {
 }
 
 // Booking Card
+
 class BookindCard extends StatelessWidget {
   final String text;
+  final String image;
   final String title;
   final String subtitle;
   final String descrption;
   final VoidCallback onPressed;
+
   const BookindCard({
     super.key,
     required this.text,
@@ -844,110 +682,113 @@ class BookindCard extends StatelessWidget {
     required this.subtitle,
     required this.descrption,
     required this.onPressed,
+    required this.image,
   });
+
+  Widget buildImage(String img) {
+    if (img.isEmpty) {
+      return Image.asset(
+        "assets/profile.png",
+        width: 130,
+        height: 130,
+        fit: BoxFit.cover,
+      );
+    }
+
+    // Network image
+    if (img.startsWith("http")) {
+      return Image.network(
+        img,
+        width: 130,
+        height: 130,
+        fit: BoxFit.cover,
+      );
+    }
+
+    // Local file path
+    if (img.startsWith("/")) {
+      return Image.file(
+        File(img),
+        width: 130,
+        height: 130,
+        fit: BoxFit.cover,
+      );
+    }
+
+    // Asset image fallback
+    return Image.asset(
+      img,
+      width: 130,
+      height: 130,
+      fit: BoxFit.cover,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 5.0, left: 5, right: 5),
+      padding: const EdgeInsets.only(top: 5, left: 5, right: 5),
       child: Card(
         color: AppColors.white,
         child: Row(
           children: [
             ClipRRect(
-              borderRadius: BorderRadiusGeometry.only(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(16),
                 bottomLeft: Radius.circular(16),
               ),
-              child: Image.asset(
-                AppImages.home1,
-                width: 130,
-                height: 130,
-                fit: BoxFit.cover,
-              ),
+              child: buildImage(image),
             ),
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 50.0),
-                  child: Container(
-                    child: Text(
-                      text,
-                      style: TextStyle(
-                        color: AppColors.pureblack,
-                        fontWeight: .w700,
-                        fontSize: 12,
+
+            const SizedBox(width: 10),
+
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    text,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 12,
+                    ),
+                  ),
+
+                  Text(title,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w800, fontSize: 11)),
+
+                  Row(
+                    children: [
+                      Text(subtitle,
+                          style: const TextStyle(fontSize: 8)),
+
+                      const SizedBox(width: 5),
+
+                      Text(descrption,
+                          style: const TextStyle(fontSize: 8)),
+                    ],
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: SizedBox(
+                      width: 121.12,
+                      height: 31,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.lightYellow,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadiusGeometry.circular(5),
+                          )
+                        ),
+                        onPressed: onPressed,
+                        child: const Text("Cancel",style: TextStyle(color: AppColors.white,fontSize: 12,fontWeight: FontWeight.w800),),
                       ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 5.0),
-                  child: Container(
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                        color: AppColors.black,
-                        fontWeight: .w800,
-                        fontSize: 11,
-                      ),
-                    ),
-                  ),
-                ),
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Container(
-                        child: Text(
-                          subtitle,
-                          style: TextStyle(
-                            color: AppColors.black,
-                            fontWeight: .w500,
-                            fontSize: 8,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0, left: 10),
-                      child: Container(
-                        child: Text(
-                          descrption,
-                          style: TextStyle(
-                            color: AppColors.black,
-                            fontWeight: .w500,
-                            fontSize: 8,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 30.0),
-                  child: Align(
-                    alignment: .bottomLeft,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.lightYellow,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadiusGeometry.circular(5),
-                        ),
-                      ),
-                      onPressed: onPressed,
-                      child: Text(
-                        'Cancle Booking',
-                        style: TextStyle(
-                          color: AppColors.white,
-                          fontSize: 12,
-                          fontWeight: .w800,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),
@@ -955,6 +796,131 @@ class BookindCard extends StatelessWidget {
     );
   }
 }
+// class BookindCard extends StatelessWidget {
+//   final String text;
+//   final String image;
+//   final String title;
+//   final String subtitle;
+//   final String descrption;
+//   final VoidCallback onPressed;
+//   const BookindCard({
+//     super.key,
+//     required this.text,
+//     required this.title,
+//     required this.subtitle,
+//     required this.descrption,
+//     required this.onPressed, required this.image,
+//   });
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: const EdgeInsets.only(top: 5.0, left: 5, right: 5),
+//       child: Card(
+//         color: AppColors.white,
+//         child: Row(
+//           children: [
+//             ClipRRect(
+//               borderRadius: BorderRadiusGeometry.only(
+//                 topLeft: Radius.circular(16),
+//                 bottomLeft: Radius.circular(16),
+//               ),
+//               child: Image.asset(
+//                image,
+//                 width: 130,
+//                 height: 130,
+//                 fit: BoxFit.cover,
+//               ),
+//             ),
+//             Column(
+//               children: [
+//                 Padding(
+//                   padding: const EdgeInsets.only(right: 50.0),
+//                   child: Container(
+//                     child: Text(
+//                       text,
+//                       style: TextStyle(
+//                         color: AppColors.pureblack,
+//                         fontWeight: .w700,
+//                         fontSize: 12,
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+//                 Padding(
+//                   padding: const EdgeInsets.only(top: 5.0),
+//                   child: Container(
+//                     child: Text(
+//                       title,
+//                       style: TextStyle(
+//                         color: AppColors.black,
+//                         fontWeight: .w800,
+//                         fontSize: 11,
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+//                 Row(
+//                   children: [
+//                     Padding(
+//                       padding: const EdgeInsets.only(top: 5.0),
+//                       child: Container(
+//                         child: Text(
+//                           subtitle,
+//                           style: TextStyle(
+//                             color: AppColors.black,
+//                             fontWeight: .w500,
+//                             fontSize: 8,
+//                           ),
+//                         ),
+//                       ),
+//                     ),
+//                     Padding(
+//                       padding: const EdgeInsets.only(top: 5.0, left: 10),
+//                       child: Container(
+//                         child: Text(
+//                           descrption,
+//                           style: TextStyle(
+//                             color: AppColors.black,
+//                             fontWeight: .w500,
+//                             fontSize: 8,
+//                           ),
+//                         ),
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//                 Padding(
+//                   padding: const EdgeInsets.only(left: 30.0),
+//                   child: Align(
+//                     alignment: .bottomLeft,
+//                     child: ElevatedButton(
+//                       style: ElevatedButton.styleFrom(
+//                         backgroundColor: AppColors.lightYellow,
+//                         shape: RoundedRectangleBorder(
+//                           borderRadius: BorderRadiusGeometry.circular(5),
+//                         ),
+//                       ),
+//                       onPressed: onPressed,
+//                       child: Text(
+//                         'Cancle Booking',
+//                         style: TextStyle(
+//                           color: AppColors.white,
+//                           fontSize: 12,
+//                           fontWeight: .w800,
+//                         ),
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class NotifiCard1 extends StatelessWidget {
   final String text;
@@ -1418,216 +1384,6 @@ class handymancard extends StatelessWidget {
     );
   }
 }
-// class handymancard extends StatelessWidget {
-//   final String image;
-//   final String text;
-//   final String buttontext;
-//   final String subbuttontext;
-//   final String subtext;
-//   final String title;
-//   final String subtitle;
-//   final Color color;
-//   final Color textcolor;
-//   final VoidCallback onPressed;
-//   final VoidCallback onTap;
-//
-//   const handymancard({
-//     super.key,
-//     required this.text,
-//     required this.subtext,
-//     required this.title,
-//     required this.subtitle,
-//     required this.color,
-//     required this.textcolor,
-//     required this.onPressed,
-//     required this.image,
-//     required this.buttontext,
-//     required this.subbuttontext,
-//     required this.onTap,
-//   });
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Center(
-//       child: SizedBox(
-//         height: 247,
-//         width: 334,
-//         child: Card(
-//           color: AppColors.fieldcolor,
-//           child: Column(
-//             crossAxisAlignment: .start,
-//             children: [
-//               Row(
-//                 mainAxisAlignment: .start,
-//                 crossAxisAlignment: .start,
-//                 children: [
-//                   Padding(
-//                     padding: const EdgeInsets.only(top: 18, left: 10),
-//                     child: CircleAvatar(
-//                       radius: 40,
-//                       backgroundImage: AssetImage(image),
-//                     ),
-//                   ),
-//                   Column(
-//                     crossAxisAlignment: .start,
-//                     children: [
-//                       Padding(
-//                         padding: const EdgeInsets.only(left: 15.0),
-//                         child: Row(
-//                           mainAxisAlignment: .spaceBetween,
-//                           children: [
-//                             Container(
-//                               child: Text(
-//                                 text,
-//                                 style: TextStyle(
-//                                   color: textcolor,
-//                                   fontSize: 18,
-//                                   fontWeight: .w500,
-//                                 ),
-//                               ),
-//                             ),
-//
-//                             Padding(
-//                               padding: const EdgeInsets.only(left: 30.0),
-//                               child: Container(
-//                                 child: IconButton(
-//                                   onPressed: onPressed,
-//                                   icon: Icon(Icons.more_horiz),
-//                                 ),
-//                               ),
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                       Padding(
-//                         padding: const EdgeInsets.only(left: 15.0),
-//                         child: Row(
-//                           children: [
-//                             Icon(Icons.email),
-//                             Padding(
-//                               padding: const EdgeInsets.only(left: 10.0),
-//                               child: Container(
-//                                 child: Text(
-//                                   subtext,
-//                                   style: TextStyle(
-//                                     color: color,
-//                                     fontSize: 14,
-//                                     fontWeight: .w500,
-//                                   ),
-//                                 ),
-//                               ),
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                       Padding(
-//                         padding: const EdgeInsets.only(left: 15.0),
-//                         child: Row(
-//                           children: [
-//                             Icon(Icons.location_on),
-//                             Padding(
-//                               padding: const EdgeInsets.only(left: 10.0),
-//                               child: Container(
-//                                 child: Text(
-//                                   title,
-//                                   style: TextStyle(
-//                                     color: color,
-//                                     fontSize: 14,
-//                                     fontWeight: .w500,
-//                                   ),
-//                                 ),
-//                               ),
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                       Padding(
-//                         padding: const EdgeInsets.only(left: 15.0),
-//                         child: Row(
-//                           children: [
-//                             Icon(Icons.call),
-//                             Padding(
-//                               padding: const EdgeInsets.only(left: 10.0),
-//                               child: Container(
-//                                 child: Text(
-//                                   subtitle,
-//                                   style: TextStyle(
-//                                     color: color,
-//                                     fontSize: 14,
-//                                     fontWeight: .w500,
-//                                   ),
-//                                 ),
-//                               ),
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ],
-//               ),
-//               Padding(
-//                 padding: const EdgeInsets.only(top: 35.0),
-//                 child: Row(
-//                   children: [
-//                     Padding(
-//                       padding: const EdgeInsets.only(left: 15.0),
-//                       child: SizedBox(
-//                         height: 38,
-//                         width: 134,
-//                         child: ElevatedButton(
-//                           style: ElevatedButton.styleFrom(
-//                             backgroundColor: AppColors.purple,
-//                             shape: RoundedRectangleBorder(
-//                               borderRadius: BorderRadiusGeometry.circular(5),
-//                             ),
-//                           ),
-//                           onPressed: onTap,
-//                           child: Text(
-//                             subbuttontext,
-//                             style: TextStyle(
-//                               color: AppColors.white,
-//                               fontSize: 14,
-//                               fontWeight: .w500,
-//                             ),
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                     Padding(
-//                       padding: const EdgeInsets.only(left: 15.0),
-//                       child: SizedBox(
-//                         height: 38,
-//                         width: 134,
-//                         // child: TextButton(
-//                         //   style: TextButton.styleFrom(
-//                         //     backgroundColor: AppColors.white,
-//                         //     shape: RoundedRectangleBorder(
-//                         //       borderRadius: BorderRadiusGeometry.circular(5),
-//                         //     ),
-//                         //   ),
-//                         //   onPressed: onDoubleTap,
-//                         //   child: Text(
-//                         //     buttontext,
-//                         //     style: TextStyle(
-//                         //       color: AppColors.black,
-//                         //       fontSize: 14,
-//                         //       fontWeight: .w500,
-//                         //     ),
-//                         //   ),
-//                         // ),
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
 
 // customer Review Card
 class customerReviewcard extends StatelessWidget {

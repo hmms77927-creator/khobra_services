@@ -49,10 +49,12 @@ import 'package:flutter_application_newproject/View/Widgets/Bottom-NavigationBar
 import 'package:flutter_application_newproject/View/Widgets/Bottom-NavigationBar/bottom_provider.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
+import 'Data/Local/shared_pref.dart';
 import 'firebase_options.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  await SharedPref.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
