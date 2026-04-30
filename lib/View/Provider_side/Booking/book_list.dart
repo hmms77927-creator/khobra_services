@@ -97,9 +97,11 @@ class _BookListState extends State<BookList> {
                   controller: searchcontroller,
                   text: 'Pending',
                   onPressed: () {
+                    final item = list[index];
+
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => BookServices()),
+                      MaterialPageRoute(builder: (context) => BookingServices(item: item,)),
                     );
                   },
                 ),

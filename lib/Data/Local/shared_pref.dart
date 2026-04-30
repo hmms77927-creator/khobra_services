@@ -26,3 +26,55 @@ class SharedPref {
     await prefs?.remove("bookings");
   }
 }
+
+
+
+
+
+
+class SharedPref1 {
+  static SharedPreferences? prefs;
+
+  /// INIT (must call in main)
+  static Future init() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
+  /// =====================
+  /// REVIEWS
+  /// =====================
+
+  static List<Map> getReviews() {
+    final data = prefs?.getStringList("reviews") ?? [];
+
+    return data.map((e) {
+      return jsonDecode(e) as Map;
+    }).toList();
+  }
+
+  static saveReviews(List<Map> reviews) {
+    prefs?.setStringList(
+      "reviews",
+      reviews.map((e) => jsonEncode(e)).toList(),
+    );
+  }
+
+  /// =====================
+  /// BOOKINGS
+  /// =====================
+
+  static List<Map> getBookings() {
+    final data = prefs?.getStringList("bookings") ?? [];
+
+    return data.map((e) {
+      return jsonDecode(e) as Map;
+    }).toList();
+  }
+
+  static saveBookings(List<Map> bookings) {
+    prefs?.setStringList(
+      "bookings",
+      bookings.map((e) => jsonEncode(e)).toList(),
+    );
+  }
+}

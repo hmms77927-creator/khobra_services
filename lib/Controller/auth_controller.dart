@@ -206,32 +206,6 @@ class DriverController extends GetxController {
 
 
 
-// class ServiceController extends GetxController {
-//   FirebaseFirestore firestore = FirebaseFirestore.instance;
-//
-//   var serviceList = [].obs;
-//
-//   /// FETCH
-//   void fetchServices() {
-//     firestore.collection("add_services").snapshots().listen((snapshot) {
-//       serviceList.value = snapshot.docs.map((doc) {
-//         return {
-//           "id": doc.id,
-//           ...doc.data(),
-//         };
-//       }).toList();
-//     });
-//   }
-//
-//   /// ADD
-//   Future<void> addService(Map<String, dynamic> data) async {
-//     await firestore.collection("add_services").add(data);
-//   }
-// }
-
-
-
-
 class ServiceController extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -264,3 +238,52 @@ class ServiceController extends GetxController {
     });
   }
 }
+
+
+
+
+
+
+class BookingController extends GetxController {
+  var bookings = <BookingItem>[].obs;
+
+  /// ➕ ADD ITEM (AUTO INCREASE QUANTITY)
+  void addItem(Map item) {
+    int index = bookings.indexWhere(
+          (e) => e.name == item["serviceName"],
+    );
+
+    if (index != -1) {
+      bookings[index].quantity++;
+    } else {
+      bookings.add(
+        BookingItem(
+          name: item["serviceName"],
+          price: double.tryParse(item["price"].toString()) ?? 0,
+          hours: item["hours"] ?? 0,
+          minutes: item["minutes"] ?? 0,
+          image: item["image"] ?? "",
+        ),
+      );
+    }
+
+    bookings.refresh();
+  }
+
+  /// ➖ DECREASE
+  void decrease(int index) {
+    if (bookings[index].quantity > 1) {
+      bookings[index].quantity--;
+    } else {
+      bookings.removeAt(index);
+    }
+
+    bookings.refresh();
+  }
+
+  /// 🔥 TOTAL PRICE (AUTO SUM)
+  double get total =>
+      bookings.fold(0, (sum, item) => sum + item.subtotal);
+}
+
+

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -5,6 +6,7 @@ import '../../Constant/app-colors.dart';
 import '../../Controller/auth_controller.dart';
 import '../../Data/Local/shared_pref.dart';
 import '../Booking/booking_1.dart';
+import '../Provider_side/Home/home_rewive.dart';
 import '../Widgets/App-Card/card.dart';
 import '../Widgets/TextField/app-textfield.dart';
 import 'dashboard.dart';
@@ -18,6 +20,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final controller = Get.put(ServiceController());
+  final serviceController = Get.put(ServiceController());
+  final bookingController = Get.find<BookingController>();
 
   @override
   void initState() {
@@ -84,8 +88,14 @@ class _HomeState extends State<Home> {
               description: "Duration",
               subdescription: "${item["hours"]}h ${item["minutes"]}m",
               onPressed: () {
-                saveBooking(item);
-                Get.to(() => const Booking1());
+Get.to(HomeRewive (
+
+  serviceId: item["id"],
+  serviceName: item["serviceName"],
+  image: item["image"],));
+
+                // saveBooking(item);
+                // Get.to(() => Booking1());
               },
               onTap: () {
                 Get.to(Dashboard(),arguments: {

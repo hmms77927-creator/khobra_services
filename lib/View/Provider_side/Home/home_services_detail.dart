@@ -217,12 +217,16 @@ class _HomeServicesDetailState extends State<HomeServicesDetail> {
                       head2cont(text: 'Reviews', color: AppColors.black),
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HomeRewive(),
-                            ),
-                          );
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) =>  HomeRewive(
+                          //       serviceId: item["id"],
+                          //       serviceName: item["serviceName"],
+                          //       image: item["image"],
+                          //     )
+                          //   ),
+                          // );
                         },
                         child: servicetext(
                           text: 'View All',

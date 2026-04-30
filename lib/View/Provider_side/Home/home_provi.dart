@@ -50,7 +50,7 @@ class _HomeProviState extends State<HomeProvi> {
                         text: '98',
                         title: 'Total Booking',
                         image: AppImages.ticket, onTap: () {
-                          Get.to(BookServices());
+                          // Get.to(BookServices());
                       },
                       ),
                       homeProvidercontain(

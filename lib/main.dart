@@ -47,8 +47,11 @@ import 'package:flutter_application_newproject/View/Provider_side/Splash/splash_
 import 'package:flutter_application_newproject/View/SplashScreen/splash-view.dart';
 import 'package:flutter_application_newproject/View/Widgets/Bottom-NavigationBar/Bottombar.dart';
 import 'package:flutter_application_newproject/View/Widgets/Bottom-NavigationBar/bottom_provider.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
+import 'Controller/auth_controller.dart';
 import 'Data/Local/shared_pref.dart';
 import 'firebase_options.dart';
 
@@ -58,6 +61,8 @@ void main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  Get.put(BookingController());
+
   runApp(const MyApp());
 }
 
