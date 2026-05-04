@@ -1,19 +1,53 @@
 // import 'package:flutter/material.dart';
-// import 'package:flutter_application_newproject/Constant/app-colors.dart';
-// import 'package:flutter_application_newproject/Constant/app-images.dart';
-// import 'package:flutter_application_newproject/View/Widgets/App-Buttons/custom-Buttons.dart';
-// import 'package:flutter_application_newproject/View/Widgets/Custom-Container/custom_container.dart';
 //
-// class BookServices extends StatefulWidget {
-//   const BookServices({super.key});
+// import '../../../Constant/app-colors.dart';
+//
+// class BookingServices extends StatefulWidget {
+//   final List<Map> bookings;
+//
+//   const BookingServices({
+//     super.key,
+//     required this.bookings,
+//   });
 //
 //   @override
-//   State<BookServices> createState() => _BookServicesState();
+//   State<BookingServices> createState() => _BookingServicesState();
 // }
 //
-// class _BookServicesState extends State<BookServices> {
+// class _BookingServicesState extends State<BookingServices> {
+//   late List<Map> items;
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     items = widget.bookings;
+//
+//     for (var e in items) {
+//       e["qty"] ??= 1;
+//     }
+//   }
+//
+//   double get subtotal {
+//     return items.fold(0, (sum, item) {
+//       int qty = int.tryParse(item["qty"].toString()) ?? 1;
+//       double price = double.tryParse(item["price"].toString()) ?? 0;
+//       return sum + (price * qty);
+//     });
+//   }
+//
+//   double get discount => subtotal * 0.05;
+//   double get total => subtotal - discount;
+//
+//   int get totalQty {
+//     return items.fold(0, (sum, item) {
+//       return sum + (int.tryParse(item["qty"].toString()) ?? 1);
+//     });
+//   }
+//
 //   @override
 //   Widget build(BuildContext context) {
+//     final item = items.isNotEmpty ? items[0] : {};
+//
 //     return Scaffold(
 //       backgroundColor: AppColors.white,
 //       appBar: AppBar(
@@ -49,88 +83,52 @@
 //       ),
 //       body: SingleChildScrollView(
 //         child: Column(
-//           crossAxisAlignment: .start,
+//           crossAxisAlignment: CrossAxisAlignment.start,
 //           children: [
-//             Row(
-//               children: [
-//                 Padding(
-//                   padding: const EdgeInsets.only(left: 15.0),
-//                   child: headingcon(
-//                     text: 'Booking ID',
-//                     color: AppColors.fullgrey,
-//                   ),
-//                 ),
-//                 Spacer(),
-//                 Padding(
-//                   padding: const EdgeInsets.only(right: 15.0),
-//                   child: head2cont(text: '#123', color: AppColors.purple),
-//                 ),
-//               ],
+//
+//             /// BOOKING ID
+//             Padding(
+//               padding: const EdgeInsets.all(15),
+//               child: Row(
+//                 children: [
+//                   const Text("Booking ID",
+//                       style: TextStyle(color: Colors.grey)),
+//                   const Spacer(),
+//                   Text("#${item["id"] ?? "123"}",
+//                       style: const TextStyle(color: Colors.purple)),
+//                 ],
+//               ),
 //             ),
-//             divicontainer(),
+//             const Divider(),
 //             Row(
 //               children: [
 //                 Padding(
-//                   padding: const EdgeInsets.only(top: 10.0),
+//                   padding: const EdgeInsets.all(15),
 //                   child: Column(
-//                     crossAxisAlignment: .start,
+//                     crossAxisAlignment: CrossAxisAlignment.start,
 //                     children: [
-//                       Padding(
-//                         padding: const EdgeInsets.only(left: 15.0),
-//                         child: head2cont(
-//                           text: 'Apartment Cleaning',
-//                           color: AppColors.black,
-//                         ),
+//                       Text(
+//                         item["serviceName"] ?? "",
+//                         style: const TextStyle(
+//                             fontSize: 18,
+//                             fontWeight: FontWeight.bold),
 //                       ),
-//                       Padding(
-//                         padding: const EdgeInsets.only(top: 10.0),
-//                         child: Row(
-//                           children: [
-//                             Padding(
-//                               padding: const EdgeInsets.only(left: 15.0),
-//                               child: subcontainer(
-//                                 text: 'Date :',
-//                                 color: AppColors.black,
-//                               ),
-//                             ),
-//                             subcontainer(
-//                               text: '26 Jan, 2022',
-//                               color: AppColors.fullgrey,
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                       Row(
-//                         children: [
-//                           Padding(
-//                             padding: const EdgeInsets.only(
-//                               left: 15.0,
-//                               bottom: 10,
-//                             ),
-//                             child: subcontainer(
-//                               text: 'Time :',
-//                               color: AppColors.black,
-//                             ),
-//                           ),
-//                           subcontainer(
-//                             text: '04:00 PM',
-//                             color: AppColors.fullgrey,
-//                           ),
-//                         ],
-//                       ),
+//                       const SizedBox(height: 10),
+//                       Text("Date: ${item["date"] ?? "26 Jan, 2022"}"),
+//                       Text("Time: ${item["time"] ?? "04:00 PM"}"),
 //                     ],
 //                   ),
 //                 ),
-//                 Spacer(),
+//                 const Spacer(),
 //                 Padding(
-//                   padding: const EdgeInsets.only(right: 50.0),
+//                   padding: const EdgeInsets.only(right: 15),
 //                   child: Container(
 //                     width: 80,
 //                     height: 80,
 //                     decoration: BoxDecoration(
 //                       borderRadius: BorderRadius.circular(10),
 //                       image: DecorationImage(
-//                         image: AssetImage(AppImages.wiring),
+//                         image: NetworkImage(item["image"] ?? ""),
 //                         fit: BoxFit.cover,
 //                       ),
 //                     ),
@@ -138,84 +136,46 @@
 //                 ),
 //               ],
 //             ),
-//             Padding(
-//               padding: const EdgeInsets.only(left: 15.0),
-//               child: head2cont(text: 'About Customer', color: AppColors.black),
+//
+//             const Divider(),
+//
+//             /// CUSTOMER (same UI style)
+//             const Padding(
+//               padding: EdgeInsets.all(15),
+//               child: Text("About Customer",
+//                   style: TextStyle(
+//                       fontSize: 16, fontWeight: FontWeight.bold)),
 //             ),
-//             Padding(
-//               padding: const EdgeInsets.only(top: 10.0),
-//               child: Center(
+//
+//             Center(
+//               child: Card(
+//                 color: Colors.grey.shade100,
 //                 child: SizedBox(
-//                   width: 336,
-//                   height: 192,
-//                   child: Card(
-//                     color: AppColors.fieldcolor,
-//                     child: Row(
-//                       mainAxisAlignment: .start,
-//                       crossAxisAlignment: .start,
+//                   width: 340,
+//                   child: Padding(
+//                     padding: const EdgeInsets.all(15),
+//                     child: Column(
 //                       children: [
-//                         Padding(
-//                           padding: const EdgeInsets.only(top: 25.0, left: 10),
-//                           child: CircleAvatar(
-//                             radius: 40,
-//                             backgroundImage: AssetImage(AppImages.booking),
-//                           ),
+//                         const CircleAvatar(
+//                           radius: 35,
+//                           child: Icon(Icons.person),
 //                         ),
-//                         Column(
-//                           crossAxisAlignment: .start,
+//                         const SizedBox(height: 10),
+//                         Text(item["customerName"] ?? "Customer"),
+//                         const SizedBox(height: 10),
+//                         Row(
 //                           children: [
-//                             Padding(
-//                               padding: const EdgeInsets.only(
-//                                 top: 10.0,
-//                                 left: 20,
-//                               ),
-//                               child: head2cont(
-//                                 text: 'Rose Customer',
-//                                 color: AppColors.black,
-//                               ),
-//                             ),
-//                             Padding(
-//                               padding: const EdgeInsets.only(top: 10.0),
-//                               child: Row(
-//                                 children: [
-//                                   Padding(
-//                                     padding: const EdgeInsets.only(left: 18.0),
-//                                     child: Icon(
-//                                       Icons.email,
-//                                       color: AppColors.fullgrey,
-//                                     ),
-//                                   ),
-//                                   Padding(
-//                                     padding: const EdgeInsets.only(left: 15.0),
-//                                     child: subcontainer(
-//                                       text: 'example@gmail.com',
-//                                       color: AppColors.fullgrey,
-//                                     ),
-//                                   ),
-//                                 ],
-//                               ),
-//                             ),
-//                             Padding(
-//                               padding: const EdgeInsets.only(top: 15.0),
-//                               child: Row(
-//                                 children: [
-//                                   Padding(
-//                                     padding: const EdgeInsets.only(left: 15.0),
-//                                     child: Icon(
-//                                       Icons.location_on,
-//                                       color: AppColors.fullgrey,
-//                                     ),
-//                                   ),
-//                                   Padding(
-//                                     padding: const EdgeInsets.only(left: 10.0),
-//                                     child: subcontainer(
-//                                       text: '1901 Thornridge Cirav...',
-//                                       color: AppColors.fullgrey,
-//                                     ),
-//                                   ),
-//                                 ],
-//                               ),
-//                             ),
+//                             const Icon(Icons.email, size: 18),
+//                             const SizedBox(width: 10),
+//                             Text(item["email"] ?? "example@gmail.com"),
+//                           ],
+//                         ),
+//                         const SizedBox(height: 10),
+//                         Row(
+//                           children: [
+//                             const Icon(Icons.location_on, size: 18),
+//                             const SizedBox(width: 10),
+//                             Text(item["address"] ?? "Address"),
 //                           ],
 //                         ),
 //                       ],
@@ -224,475 +184,362 @@
 //                 ),
 //               ),
 //             ),
-//             Padding(
-//               padding: const EdgeInsets.all(13.0),
-//               child: headingcon(
-//                 text: 'Payment Details',
-//                 color: AppColors.black,
-//               ),
+//             const Padding(
+//               padding: EdgeInsets.all(15),
+//               child: Text("Payment Details",
+//                   style: TextStyle(
+//                       fontSize: 16, fontWeight: FontWeight.bold)),
 //             ),
 //             Center(
-//               child: SizedBox(
-//                 width: 335,
-//                 height: 159,
-//                 child: Card(
-//                   color: AppColors.fieldcolor,
-//                   child: Column(
-//                     children: [
-//                       Row(
-//                         children: [
-//                           Padding(
-//                             padding: const EdgeInsets.only(left: 15.0, top: 10),
-//                             child: subcontainer(
-//                               text: 'ID',
-//                               color: AppColors.black,
-//                             ),
-//                           ),
-//                           Spacer(),
-//                           Padding(
-//                             padding: const EdgeInsets.only(
-//                               right: 20.0,
-//                               top: 10,
-//                             ),
-//                             child: head2cont(
-//                               text: '#123',
-//                               color: AppColors.purple,
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                       divicontainer(),
-//                       Row(
-//                         children: [
-//                           Padding(
-//                             padding: const EdgeInsets.only(left: 15.0),
-//                             child: subcontainer(
-//                               text: 'Method',
-//                               color: AppColors.black,
-//                             ),
-//                           ),
-//                           Spacer(),
-//                           Padding(
-//                             padding: const EdgeInsets.only(right: 20.0),
-//                             child: subcontainer(
-//                               text: 'Cash',
-//                               color: AppColors.fullgrey,
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                       divicontainer(),
-//                       Row(
-//                         children: [
-//                           Padding(
-//                             padding: const EdgeInsets.only(left: 15.0),
-//                             child: subcontainer(
-//                               text: 'Status',
-//                               color: AppColors.black,
-//                             ),
-//                           ),
-//                           Spacer(),
-//                           Padding(
-//                             padding: const EdgeInsets.only(right: 20.0),
-//                             child: subcontainer(
-//                               text: 'Pending',
-//                               color: AppColors.green,
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                       divicontainer(),
-//                       Row(
-//                         children: [
-//                           Padding(
-//                             padding: const EdgeInsets.only(left: 15.0),
-//                             child: subcontainer(
-//                               text: 'Subtotal',
-//                               color: AppColors.black,
-//                             ),
-//                           ),
-//                           Spacer(),
-//                           Padding(
-//                             padding: const EdgeInsets.only(right: 20.0),
-//                             child: subcontainer(
-//                               text: 'Rs459',
-//                               color: AppColors.fullgrey,
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ),
-//             ),
-//             Padding(
-//               padding: const EdgeInsets.all(13.0),
-//               child: head2cont(text: 'Price Detail', color: AppColors.black),
-//             ),
-//             Center(
-//               child: SizedBox(
-//                 width: 335,
-//                 height: 246,
-//                 child: Card(
-//                   color: AppColors.fieldcolor,
-//                   child: Column(
-//                     children: [
-//                       Row(
-//                         children: [
-//                           Padding(
-//                             padding: const EdgeInsets.only(left: 15.0, top: 10),
-//                             child: subcontainer(
-//                               text: 'Rate',
-//                               color: AppColors.black,
-//                             ),
-//                           ),
-//                           Spacer(),
-//                           Padding(
-//                             padding: const EdgeInsets.only(
-//                               right: 20.0,
-//                               top: 10,
-//                             ),
-//                             child: subcontainer(
-//                               text: '₹45.00',
-//                               color: AppColors.fullgrey,
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                       divicontainer(),
-//                       Row(
-//                         children: [
-//                           Padding(
-//                             padding: const EdgeInsets.only(left: 15.0),
-//                             child: subcontainer(
-//                               text: 'Quantity',
-//                               color: AppColors.black,
-//                             ),
-//                           ),
-//                           Spacer(),
-//                           Padding(
-//                             padding: const EdgeInsets.only(right: 20.0),
-//                             child: subcontainer(
-//                               text: '*2',
-//                               color: AppColors.fullgrey,
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                       divicontainer(),
-//                       Row(
-//                         children: [
-//                           Padding(
-//                             padding: const EdgeInsets.only(left: 15.0),
-//                             child: subcontainer(
-//                               text: 'Discount',
-//                               color: AppColors.black,
-//                             ),
-//                           ),
-//                           subcontainer(
-//                             text: ' (5% off)',
-//                             color: AppColors.green,
-//                           ),
-//                           Spacer(),
-//                           Padding(
-//                             padding: const EdgeInsets.only(right: 20.0),
-//                             child: subcontainer(
-//                               text: '- Rs23.66',
-//                               color: AppColors.green,
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                       divicontainer(),
-//                       Row(
-//                         children: [
-//                           Padding(
-//                             padding: const EdgeInsets.only(left: 15.0),
-//                             child: subcontainer(
-//                               text: 'Coupon',
-//                               color: AppColors.black,
-//                             ),
-//                           ),
-//                           subcontainer(
-//                             text: ' (AB45789A)',
-//                             color: AppColors.purple,
-//                           ),
-//                           Spacer(),
-//                           Padding(
-//                             padding: const EdgeInsets.only(right: 20.0),
-//                             child: subcontainer(
-//                               text: 'Rs459',
-//                               color: AppColors.green,
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                       divicontainer(),
-//                       Row(
-//                         children: [
-//                           Padding(
-//                             padding: const EdgeInsets.only(left: 15.0),
-//                             child: subcontainer(
-//                               text: 'Subtotal',
-//                               color: AppColors.black,
-//                             ),
-//                           ),
-//                           Spacer(),
-//                           Padding(
-//                             padding: const EdgeInsets.only(right: 20.0),
-//                             child: subcontainer(
-//                               text: 'Rs459',
-//                               color: AppColors.fullgrey,
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                       divicontainer(),
-//                       Row(
-//                         children: [
-//                           Padding(
-//                             padding: const EdgeInsets.only(left: 15.0),
-//                             child: head2cont(
-//                               text: 'Total Amount',
-//                               color: AppColors.black,
-//                             ),
-//                           ),
-//                           Spacer(),
-//                           Padding(
-//                             padding: const EdgeInsets.only(right: 20.0),
-//                             child: head2cont(
-//                               text: 'Rs1255',
-//                               color: AppColors.purple,
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ),
-//             ),
-//             Padding(
-//               padding: const EdgeInsets.only(bottom: 10.0, top: 5),
-//               child: Center(
+//               child: Card(
+//                 color: Colors.grey.shade100,
 //                 child: SizedBox(
-//                   width: 141,
-//                   height: 38,
-//                   child: Bookbutton(
-//                     text: 'Start',
-//                     onPressed: () {
-//                       showModalBottomSheet(
-//                         context: context,
-//                         shape: RoundedRectangleBorder(
-//                           borderRadius: BorderRadius.vertical(
-//                             top: Radius.circular(20),
-//                           ),
-//                         ),
-//                         builder: (context) {
-//                           return Container(
-//                             child: SingleChildScrollView(
-//                               child: Column(
-//                                 children: [
-//                                   Container(
-//                                     width: 40,
-//                                     child: Divider(
-//                                       color: AppColors.dividercolor,
-//                                       thickness: 3,
-//                                     ),
-//                                   ),
-//                                   Row(
-//                                     mainAxisAlignment: .spaceBetween,
-//                                     children: [
-//                                       Padding(
-//                                         padding: const EdgeInsets.only(
-//                                           left: 15.0,
-//                                         ),
-//                                         child: head2cont(
-//                                           text: 'Booking History',
-//                                           color: AppColors.black,
-//                                         ),
-//                                       ),
-//                                       Padding(
-//                                         padding: const EdgeInsets.only(
-//                                           right: 20.0,
-//                                         ),
-//                                         child: head2cont(
-//                                           text: 'ID : #123',
-//                                           color: AppColors.purple,
-//                                         ),
-//                                       ),
-//                                     ],
-//                                   ),
-//                                   divicontainer(),
-//                                   Bottomsheetcontainer(
-//                                     text: '1:17 PM',
-//                                     subtext: '6 Feb',
-//                                     title: 'New Booking',
-//                                     subtitle: 'New Booking Added by\n customer',
-//                                     color: AppColors.red,
-//                                   ),
-//                                   Bottomsheetcontainer(
-//                                     text: '1:21 PM',
-//                                     subtext: '6 Feb',
-//                                     title: 'Accept Booking',
-//                                     subtitle:
-//                                         'Status changed From\n pending to accept',
-//                                     color: AppColors.lightGreen,
-//                                   ),
-//                                   Bottomsheetcontainer(
-//                                     text: '1:22 PM',
-//                                     subtext: '6 Feb',
-//                                     title: 'Assigned Booking',
-//                                     subtitle:
-//                                         'Booking has assigned\n to Naomie Hackett',
-//                                     color: AppColors.red,
-//                                   ),
-//                                 ],
-//                               ),
-//                             ),
-//                           );
-//                         },
-//                       );
-//                     },
+//                   width: 340,
+//                   child: Column(
+//                     children: [
+//                       row("Method", "Cash"),
+//                       row("Status", "Pending",
+//                           color: Colors.orange),
+//                       row("Subtotal",
+//                           "Rs ${subtotal.toStringAsFixed(2)}"),
+//                     ],
 //                   ),
 //                 ),
 //               ),
 //             ),
+//             const Padding(
+//               padding: EdgeInsets.all(15),
+//               child: Text("Price Detail",
+//                   style: TextStyle(
+//                       fontSize: 16, fontWeight: FontWeight.bold)),
+//             ),
+//
+//             Center(
+//               child: Card(
+//                 color: Colors.grey.shade100,
+//                 child: SizedBox(
+//                   width: 340,
+//                   child: Column(
+//                     children: [
+//                       row("Rate", "Rs ${item["price"]}"),
+//                       row("Quantity", "x$totalQty"),
+//                       row("Discount",
+//                           "- Rs ${discount.toStringAsFixed(2)}",
+//                           color: Colors.green),
+//                       row("Total",
+//                           "Rs ${total.toStringAsFixed(2)}",
+//                           isBold: true,
+//                           color: Colors.purple),
+//                     ],
+//                   ),
+//                 ),
+//               ),
+//             ),
+//
+//             const SizedBox(height: 20),
+//
+//             /// START BUTTON
+//             Center(
+//               child: ElevatedButton(
+//                 style: ElevatedButton.styleFrom(
+//                     backgroundColor: Colors.purple),
+//                 onPressed: () {},
+//                 child: const Text("Start"),
+//               ),
+//             ),
+//
+//             const SizedBox(height: 20),
 //           ],
 //         ),
 //       ),
 //     );
 //   }
+//
+//   Widget row(String title, String value,
+//       {Color? color, bool isBold = false}) {
+//     return Padding(
+//       padding:
+//       const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+//       child: Row(
+//         children: [
+//           Text(title),
+//           const Spacer(),
+//           Text(
+//             value,
+//             style: TextStyle(
+//               color: color ?? Colors.black,
+//               fontWeight:
+//               isBold ? FontWeight.bold : FontWeight.normal,
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
 // }
-
-
-
 
 import 'package:flutter/material.dart';
 
 class BookingServices extends StatefulWidget {
-  final Map item;
+  final List<Map> bookings;
 
-  const BookingServices({super.key, required this.item});
+  const BookingServices({
+    super.key,
+    required this.bookings,
+  });
 
   @override
   State<BookingServices> createState() => _BookingServicesState();
 }
 
 class _BookingServicesState extends State<BookingServices> {
-  int quantity = 1;
-  double discount = 5;
-
-  late double price;
+  late List<Map> items;
 
   @override
   void initState() {
     super.initState();
+    items = widget.bookings;
 
-    price = double.tryParse(
-      widget.item["price"].toString(),
-    ) ??
-        0;
+    /// ensure qty exists
+    for (var e in items) {
+      e["qty"] ??= 1;
+    }
   }
 
-  double get subtotal => price * quantity;
+  /// 🔥 TOTAL PRICE
+  double get subtotal {
+    return items.fold(0, (sum, item) {
+      int qty = int.tryParse(item["qty"].toString()) ?? 1;
+      double price = double.tryParse(item["price"].toString()) ?? 0;
+      return sum + (price * qty);
+    });
+  }
 
-  double get discountAmount => subtotal * discount / 100;
+  double get discount => subtotal * 0.05;
+  double get total => subtotal - discount;
 
-  double get total => subtotal - discountAmount;
+  /// 🔥 TOTAL QTY
+  int get totalQty {
+    return items.fold(0, (sum, item) {
+      return sum + (int.tryParse(item["qty"].toString()) ?? 1);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final item = widget.item;
+    /// ⚠️ UI SAME rakhne ke liye first item hi use kar rahe hain
+    final item = items.isNotEmpty ? items.first : {};
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Service Detail")),
+      backgroundColor: Colors.white,
 
-      body: Padding(
-        padding: const EdgeInsets.all(15),
+      appBar: AppBar(
+        backgroundColor: Colors.purple,
+        title: const Text("Booking Detail"),
+      ),
+
+      body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
-            Text(
-              item["serviceName"] ?? "",
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
+            /// BOOKING ID
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: Row(
+                children: [
+                  const Text("Booking ID",
+                      style: TextStyle(color: Colors.grey)),
+                  const Spacer(),
+                  Text("#${item["id"] ?? "123"}",
+                      style: const TextStyle(color: Colors.purple)),
+                ],
               ),
             ),
 
-            const SizedBox(height: 10),
+            const Divider(),
 
-            Text("${item["hours"]}h ${item["minutes"]}m"),
-
-            const SizedBox(height: 20),
-
-            /// QUANTITY
+            /// SERVICE INFO (UI SAME)
             Row(
               children: [
-                IconButton(
-                  onPressed: () {
-                    if (quantity > 1) {
-                      setState(() => quantity--);
-                    }
-                  },
-                  icon: const Icon(Icons.remove),
+                Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item["serviceName"] ?? "",
+                        style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      ),
+
+                      const SizedBox(height: 10),
+
+                      /// ✅ ORIGINAL DATE
+                      Text("Date: ${item["date"] ?? ""}"),
+
+                      /// ✅ ORIGINAL TIME
+                      Text("Time: ${item["time"] ?? ""}"),
+
+                      const SizedBox(height: 5),
+
+                      /// ✅ TOTAL QTY (MULTIPLE BOOKINGS SUPPORT)
+                      Text("Quantity: x$totalQty"),
+                    ],
+                  ),
                 ),
 
-                Text(quantity.toString()),
+                const Spacer(),
 
-                IconButton(
-                  onPressed: () {
-                    setState(() => quantity++);
-                  },
-                  icon: const Icon(Icons.add),
+                Padding(
+                  padding: const EdgeInsets.only(right: 15),
+                  child: Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                        image: NetworkImage(item["image"] ?? ""),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
 
             const Divider(),
 
-            row("Rate", "Rs ${price.toStringAsFixed(2)}"),
-            row("Quantity", "x$quantity"),
-            row("Subtotal", "Rs ${subtotal.toStringAsFixed(2)}"),
-
-            row(
-              "Discount ($discount%)",
-              "- Rs ${discountAmount.toStringAsFixed(2)}",
-              color: Colors.green,
+            /// CUSTOMER (UI SAME)
+            const Padding(
+              padding: EdgeInsets.all(15),
+              child: Text("About Customer",
+                  style: TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold)),
             ),
 
-            const Divider(),
+            Center(
+              child: Card(
+                color: Colors.grey.shade100,
+                child: SizedBox(
+                  width: 340,
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Column(
+                      children: [
+                        const CircleAvatar(
+                          radius: 35,
+                          child: Icon(Icons.person),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(item["customerName"] ?? "Customer"),
+                        const SizedBox(height: 10),
 
-            row(
-              "Total Amount",
-              "Rs ${total.toStringAsFixed(2)}",
-              isBold: true,
-            ),
+                        Row(
+                          children: [
+                            const Icon(Icons.email, size: 18),
+                            const SizedBox(width: 10),
+                            Text(item["email"] ?? "example@gmail.com"),
+                          ],
+                        ),
 
-            const Spacer(),
+                        const SizedBox(height: 10),
 
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text("Confirm Booking"),
+                        Row(
+                          children: [
+                            const Icon(Icons.location_on, size: 18),
+                            const SizedBox(width: 10),
+                            Text(item["address"] ?? "Address"),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ),
+
+            /// PAYMENT DETAILS (UI SAME)
+            const Padding(
+              padding: EdgeInsets.all(15),
+              child: Text("Payment Details",
+                  style: TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold)),
+            ),
+
+            Center(
+              child: Card(
+                color: Colors.grey.shade100,
+                child: SizedBox(
+                  width: 340,
+                  child: Column(
+                    children: [
+                      row("Method", "Cash"),
+                      row("Status", "Pending", color: Colors.orange),
+                      row("Subtotal",
+                          "Rs ${subtotal.toStringAsFixed(2)}"),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+            /// PRICE DETAIL (UI SAME)
+            const Padding(
+              padding: EdgeInsets.all(15),
+              child: Text("Price Detail",
+                  style: TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold)),
+            ),
+
+            Center(
+              child: Card(
+                color: Colors.grey.shade100,
+                child: SizedBox(
+                  width: 340,
+                  child: Column(
+                    children: [
+                      row("Rate", "Rs ${item["price"]}"),
+                      row("Quantity", "x$totalQty"),
+                      row("Discount",
+                          "- Rs ${discount.toStringAsFixed(2)}",
+                          color: Colors.green),
+                      row("Total",
+                          "Rs ${total.toStringAsFixed(2)}",
+                          isBold: true,
+                          color: Colors.purple),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            /// BUTTON (UI SAME)
+            Center(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.purple),
+                onPressed: () {},
+                child: const Text("Start"),
+              ),
+            ),
+
+            const SizedBox(height: 20),
           ],
         ),
       ),
     );
   }
 
+  /// COMMON ROW (same)
   Widget row(String title, String value,
       {Color? color, bool isBold = false}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding:
+      const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: Row(
         children: [
           Text(title),

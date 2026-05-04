@@ -2,12 +2,16 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../Models/Repository/user_repository.dart';
 import '../Models/user_model.dart';
 import '../Services/firestore_services.dart';
 import '../Services/services_auth.dart';
+import '../View/Login-Screen/Forgot-Password.dart/createnew_Password.dart';
+import '../View/Login-Screen/Forgot-Password.dart/forgot_password.dart';
+import '../View/Login-Screen/Forgot-Password.dart/verify_account.dart';
 
 
 class AuthController extends GetxController {
@@ -287,3 +291,61 @@ class BookingController extends GetxController {
 }
 
 
+
+
+class Auth1Controller extends GetxController {
+  String verificationId = "";
+
+  void sendOTP(String phone) async {
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: phone,
+
+      verificationCompleted: (credential) async {
+        await FirebaseAuth.instance.signInWithCredential(credential);
+      },
+
+      verificationFailed: (e) {
+        Get.snackbar("Error", e.message ?? "");
+      },
+
+      codeSent: (vid, token) {
+        verificationId = vid;
+        Get.to(() => CreatenewPassword());
+      },
+
+      codeAutoRetrievalTimeout: (vid) {
+        verificationId = vid;
+      },
+    );
+  }
+
+  void verifyOTP(String otp) async {
+    try {
+      PhoneAuthCredential credential =
+      PhoneAuthProvider.credential(
+        verificationId: verificationId,
+        smsCode: otp,
+      );
+
+      await FirebaseAuth.instance
+          .signInWithCredential(credential);
+
+      Get.to(() => VerifyAccount(verificationid: '',));
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
+  }
+
+  void updatePassword(String password) async {
+    try {
+      await FirebaseAuth.instance.currentUser!
+          .updatePassword(password);
+
+      Get.snackbar("Success", "Password Updated");
+
+      Get.offAll(() => ForgotPassword());
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
+  }
+}

@@ -1,36 +1,40 @@
+// import 'dart:convert';
+// import 'package:shared_preferences/shared_preferences.dart';
+//
+// class SharedPref {
+//   static SharedPreferences? prefs;
+//
+//   static Future init() async {
+//     prefs = await SharedPreferences.getInstance();
+//   }
+//
+//   static Future saveBooking(Map item) async {
+//     List<String> list = prefs?.getStringList("bookings") ?? [];
+//
+//     list.add(jsonEncode(item));
+//
+//     await prefs?.setStringList("bookings", list);
+//   }
+//
+//   static List<Map> getBookings() {
+//     List<String> list = prefs?.getStringList("bookings") ?? [];
+//
+//     return list.map((e) => jsonDecode(e) as Map).toList();
+//   }
+//
+//   static Future clearBookings() async {
+//     await prefs?.remove("bookings");
+//   }
+// }
+//
+//
+//
+//
+//
+
 import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
-
-class SharedPref {
-  static SharedPreferences? prefs;
-
-  static Future init() async {
-    prefs = await SharedPreferences.getInstance();
-  }
-
-  static Future saveBooking(Map item) async {
-    List<String> list = prefs?.getStringList("bookings") ?? [];
-
-    list.add(jsonEncode(item));
-
-    await prefs?.setStringList("bookings", list);
-  }
-
-  static List<Map> getBookings() {
-    List<String> list = prefs?.getStringList("bookings") ?? [];
-
-    return list.map((e) => jsonDecode(e) as Map).toList();
-  }
-
-  static Future clearBookings() async {
-    await prefs?.remove("bookings");
-  }
-}
-
-
-
-
-
 
 class SharedPref1 {
   static SharedPreferences? prefs;
@@ -76,5 +80,37 @@ class SharedPref1 {
       "bookings",
       bookings.map((e) => jsonEncode(e)).toList(),
     );
+  }
+}
+
+
+
+class SharedPref {
+  static SharedPreferences? prefs;
+
+  /// INIT
+  static Future init() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
+  /// SAVE BOOKING
+  static Future<void> saveBooking(Map item) async {
+    List<String> list = prefs?.getStringList("bookings") ?? [];
+
+    list.add(jsonEncode(item));
+
+    await prefs?.setStringList("bookings", list);
+  }
+
+  /// GET BOOKING
+  static List<Map> getBookings() {
+    List<String> list = prefs?.getStringList("bookings") ?? [];
+
+    return list.map((e) => jsonDecode(e)).toList().cast<Map>();
+  }
+
+  /// CLEAR ALL
+  static Future<void> clearBookings() async {
+    await prefs?.remove("bookings");
   }
 }

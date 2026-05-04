@@ -21,6 +21,7 @@ class HomeCard extends StatelessWidget {
   final String subdescription;
   final VoidCallback onPressed;
   final VoidCallback onTap;
+  final VoidCallback ontap;
 
   const HomeCard({
     super.key,
@@ -31,7 +32,7 @@ class HomeCard extends StatelessWidget {
     required this.subtitle,
     required this.description,
     required this.subdescription,
-    required this.onPressed, required this.onTap,
+    required this.onPressed, required this.onTap, required this.ontap,
   });
 
   Widget buildImage() {
@@ -139,10 +140,13 @@ class HomeCard extends StatelessWidget {
                               const Icon(Icons.star,
                                   size: 14, color: Colors.orange),
                               Flexible(
-                                child: Text(
-                                  "$subtitle • $description • $subdescription",
-                                  // overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(fontSize: 11),
+                                child: GestureDetector(
+                                  onTap: ontap,
+                                  child: Text(
+                                    "$subtitle • $description • $subdescription",
+                                    // overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(fontSize: 11),
+                                  ),
                                 ),
                               ),
                             ],
