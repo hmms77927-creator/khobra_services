@@ -60,7 +60,8 @@ class AppTextfield extends StatelessWidget {
 class HomeField extends StatelessWidget {
   final String hintText;
   final VoidCallback onPressed;
-  const HomeField({super.key, required this.hintText, required this.onPressed});
+  final Function(String)? onChanged;
+  const HomeField({super.key, required this.hintText, required this.onPressed, this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +69,7 @@ class HomeField extends StatelessWidget {
       width: 360,
       height: 64,
       child: TextField(
+        onChanged: onChanged,
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),

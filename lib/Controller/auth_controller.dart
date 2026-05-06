@@ -215,6 +215,8 @@ class ServiceController extends GetxController {
 
   var serviceList = [].obs;
   var imagePath = ''.obs;
+  var searchText = ''.obs;
+  var filteredList = [].obs;
 
   /// PICK IMAGE (TEMP)
   Future<void> pickImage() async {
@@ -242,6 +244,7 @@ class ServiceController extends GetxController {
     });
   }
 }
+
 
 
 
@@ -293,59 +296,52 @@ class BookingController extends GetxController {
 
 
 
-class Auth1Controller extends GetxController {
-  String verificationId = "";
 
-  void sendOTP(String phone) async {
-    await FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: phone,
+class Service2Controller extends GetxController {
+  var serviceList = <Map<String, dynamic>>[].obs;
+  var filteredList = <Map<String, dynamic>>[].obs;
+  var searchText = ''.obs;
 
-      verificationCompleted: (credential) async {
-        await FirebaseAuth.instance.signInWithCredential(credential);
-      },
-
-      verificationFailed: (e) {
-        Get.snackbar("Error", e.message ?? "");
-      },
-
-      codeSent: (vid, token) {
-        verificationId = vid;
-        Get.to(() => CreatenewPassword());
-      },
-
-      codeAutoRetrievalTimeout: (vid) {
-        verificationId = vid;
-      },
-    );
+  @override
+  void onInit() {
+    super.onInit();
+    listenServices();
   }
 
-  void verifyOTP(String otp) async {
-    try {
-      PhoneAuthCredential credential =
-      PhoneAuthProvider.credential(
-        verificationId: verificationId,
-        smsCode: otp,
-      );
+  void listenServices() {
+    FirebaseFirestore.instance
+        .collection("add_services")
+        .snapshots()
+        .listen((snapshot) {
 
-      await FirebaseAuth.instance
-          .signInWithCredential(credential);
+      print("🔥 Firestore docs: ${snapshot.docs.length}");
 
-      Get.to(() => VerifyAccount(verificationid: '',));
-    } catch (e) {
-      Get.snackbar("Error", e.toString());
-    }
+      final data = snapshot.docs.map((doc) {
+        final item = doc.data();
+        item["id"] = doc.id;
+        return item;
+      }).toList();
+
+      serviceList.value = data;
+      filteredList.value = data;
+
+      print("✅ serviceList loaded: ${serviceList.length}");
+    });
   }
 
-  void updatePassword(String password) async {
-    try {
-      await FirebaseAuth.instance.currentUser!
-          .updatePassword(password);
+  void filterServices(String query) {
+    searchText.value = query;
 
-      Get.snackbar("Success", "Password Updated");
+    if (query.isEmpty) {
+      filteredList.value = serviceList;
+    } else {
+      filteredList.value = serviceList.where((item) {
+        final name = (item["serviceName"] ?? "")
+            .toString()
+            .toLowerCase();
 
-      Get.offAll(() => ForgotPassword());
-    } catch (e) {
-      Get.snackbar("Error", e.toString());
+        return name.contains(query.toLowerCase());
+      }).toList();
     }
   }
 }

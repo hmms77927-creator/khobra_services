@@ -7,11 +7,9 @@ import 'package:get/get.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
-
   @override
   State<Dashboard> createState() => _DashboardState();
 }
-
 class _DashboardState extends State<Dashboard> {
 
   final data = Get.arguments ?? {};
@@ -28,10 +26,8 @@ class _DashboardState extends State<Dashboard> {
     if (img.startsWith("/")) {
       return Image.file(File(img), fit: BoxFit.cover);
     }
-
     return Image.asset(AppImages.home1, fit: BoxFit.cover);
   }
-
   @override
   Widget build(BuildContext context) {
     final image = data["image"] ?? "";

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import '../../Data/Local/shared_pref.dart';
+import '../Widgets/App-Buttons/custom-Buttons.dart';
 import '../Widgets/App-Card/card.dart';
 import '../Provider_side/Booking/book_services.dart';
 
@@ -178,10 +179,7 @@ class _Booking1State extends State<Booking1> {
             padding: const EdgeInsets.all(10),
             child: SizedBox(
               width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.purple),
-                onPressed: () {
+            child:   Bookbutton(text: 'Proceed', onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -190,9 +188,7 @@ class _Booking1State extends State<Booking1> {
                       ),
                     ),
                   );
-                },
-                child: const Text("Proceed"),
-              ),
+                   },),
             ),
           ),
         ],

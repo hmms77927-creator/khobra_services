@@ -17,13 +17,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final controller = Get.put(ServiceController());
-
-  @override
-  void initState() {
-    super.initState();
-    controller.fetchServices();
-  }
+  final controller = Get.put(Service2Controller());
 
   void saveBooking(Map item) {
     SharedPref.saveBooking(item);
@@ -33,19 +27,17 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
+
       appBar: AppBar(
         backgroundColor: AppColors.white,
-        automaticallyImplyLeading:false ,
+        automaticallyImplyLeading: false,
         elevation: 0,
-        title: Column(
+        title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
               'Hi, IQRA',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w600,
-              ),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
             ),
             Text(
               'What would you like to search?',
@@ -54,54 +46,74 @@ class _HomeState extends State<Home> {
           ],
         ),
       ),
+
       body: Obx(() {
-        final list = controller.serviceList;
+        final list = controller.filteredList;
+
+        // 🔥 SAFE LOADING CHECK (IMPORTANT FIX)
+        if (controller.serviceList.isEmpty) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
         if (list.isEmpty) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+            child: Text("No services found"),
+          );
         }
 
         return ListView.builder(
           padding: const EdgeInsets.all(15),
-          itemCount: list.length,
+          itemCount: list.length + 1,
           itemBuilder: (context, index) {
-                        if (index == 0) {
+
+            // 🔍 SEARCH FIELD
+            if (index == 0) {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 15),
                 child: HomeField(
                   hintText: 'Search for..',
+                  onChanged: (value) {
+                    controller.filterServices(value);
+                  },
                   onPressed: () {},
                 ),
               );
             }
-            final item = list[index];
-         return
-             HomeCard(
+
+            final item = list[index - 1];
+
+            return HomeCard(
               image: item["image"] ?? "",
               text: item["serviceName"] ?? "",
-              subtext: "${item["hours"]}h ${item["minutes"]}m",
+              subtext:
+              "${item["hours"] ?? 0}h ${item["minutes"] ?? 0}m",
               title: item["price"] ?? "",
               subtitle: "Rating",
               description: "Duration",
-              subdescription: "${item["hours"]}h ${item["minutes"]}m",
+              subdescription:
+              "${item["hours"] ?? 0}h ${item["minutes"] ?? 0}m",
 
               onPressed: () {
                 saveBooking(item);
                 Get.to(() => const Booking1());
               },
+
               onTap: () {
-                Get.to(Dashboard(),arguments: {
+                Get.to(Dashboard(), arguments: {
                   "image": item["image"] ?? "",
                   "text": item["serviceName"] ?? "",
-                  "subtext": "${item["hours"]}h ${item["minutes"]}m",
+                  "subtext":
+                  "${item["hours"] ?? 0}h ${item["minutes"] ?? 0}m",
                   "title": item["price"] ?? "",
                 });
-              }, ontap: () {
-              Get.to(HomeRewive (
-                serviceId: item["id"],
-                serviceName: item["serviceName"],
-                image: item["image"],));
-            },
+              },
+              ontap: () {
+                Get.to(HomeRewive(
+                  serviceId: item["id"],
+                  serviceName: item["serviceName"],
+                  image: item["image"],
+                ));
+              },
             );
           },
         );
